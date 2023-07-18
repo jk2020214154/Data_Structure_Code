@@ -355,3 +355,97 @@ bool MergeList(SeqList A,SeqList B,SeqList &C)
 #### 2.2.8
 
 >  已知在一维数组 $A[m+n]$中依次存放两个线性表( $a_1,a_2,a_3,\cdots,a_m$)和( $b_1, b_2,b_3,\cdots,b_n$)。试编写一个函数，将数组中两个顺序表的位置互换，即将( $b_1,b_2,b_3,\cdots,b_n$)放在( $a_1,a_2,a_3,\cdots,a_m$)的前面。
+
+* 前 $m$个元素,即右移 $n$个元素;后 $n$个元素,前移 $m$个元素.时间复杂度为 $O(n+m)$,空间复杂度为 $O(n+m)$.
+
+```cpp
+bool ChangeList(SeqList &L,int m,int n)
+{
+    if(L.length==0||m<=0||n<=0)
+        return false;
+    
+    ElemType *ans=(ElemType *)malloc((m+n)*sizeof(ElemType));
+
+    for(int i=0;i<m;i++)
+        ans[i+n]=L.data[i];
+    
+    for(int i=0;i<n;i++)
+        ans[i]=L.data[i+m];
+    
+    for(int i=0;i<m+n;i++)
+        L.data[i]=ans[i];
+    
+    free(ans);
+    return true;
+}
+```
+
+* 先逆置前 $m$个元素,再逆置后 $n$个元素,最后整体逆置,即可得到最终结果,时间复杂度为 $O(n+m)$,空间复杂度为 $O(1)$.
+
+```cpp
+void ReverseList(SeqList &L,int start,int length)
+{
+    for(int i=0;i<length/2;i++)
+        swap(L.data[start+i],L.data[start+length-1-i]);
+}
+
+bool ChangeList(SeqList &L,int m,int n)
+{
+    if(L.length==0||m<=0||n<=0)
+        return false;
+    
+    ReverseList(L, 0, m);
+    ReverseList(L, m, n);
+    ReverseList(L, 0, m+n);
+    return true;
+}
+```
+
+
+
+#### 2.2.9
+
+>  线性表($a_1,a_2,a_3,\cdots,a_n$)中的元素递增有序且按顺序存储于计算机内。要求设计一个算法，完成用最少时间在表中查找数值为 $x$的元素，若找到，则将其与后继元素位置相交换，若找不到，则将其插入表中并使表中元素仍递增有序.
+
+二分查找时间复杂度为 $O(log_2n)$.
+```cpp
+bool Binary_Search(SqList &L,ElemType e)
+{
+    if(L.length==0)
+        return false;
+    
+    int l=0,r=L.length-1,mid=0;
+
+    while(l<=r)//相等需判断--二分查找
+    {
+        mid=(l+r)/2;
+        if(L.data[mid]==e)
+            break;
+        if(L.data[mid]<e)
+            l=mid+1;
+        else r=mid-1;
+    }
+
+    if(L.data[mid]==e)//找到对应元素
+    {
+        if(mid<L.length-1)
+            swap(L.data[mid],L.data[mid+1]);
+    }
+    else//未找到对应元素
+    {
+        int i;
+        for(i=L.length-1;i>=l;i--)//后面元素后移
+            L.data[i+1]=L.data[i];
+        L.data[i+1]=e;
+    }
+    return true;
+}
+```
+
+#### 2.2.10
+
+> **【2010统考真题】**设将 $n(n > 1)$个整数存放到一维数组 $R$中。设计一个在时间和空间两方面都尽可能高效的算法。将 $R$中保存的序列循环左移 $p(0 < p < n)$个位置，即将 $R$中的数据由 $(X_0,X_1,\cdots,X_{n-1})$变换为  $(X_p,X_{p+1},\cdots ,X_{n-1},X_0,X_1,\cdots ,X_{p-1})$。要求：
+>
+> 1)给出算法的基本设计思想。
+> 2)根据设计思想，采用`C或C++或Java语言`描述算法，关键之处给出注释。
+> 3)说明你所设计算法的时间复杂度和空间复杂度。
