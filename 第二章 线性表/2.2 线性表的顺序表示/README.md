@@ -389,7 +389,7 @@ void ReverseList(SeqList &L,int start,int length)
         swap(L.data[start+i],L.data[start+length-1-i]);
 }
 
-bool ChangeList(SeqList &L,int m,int n)
+bool ChangeList(SeqList &L,int m,int n)////m为左半部分,n为右半部分
 {
     if(L.length==0||m<=0||n<=0)
         return false;
@@ -444,8 +444,56 @@ bool Binary_Search(SqList &L,ElemType e)
 
 #### 2.2.10
 
-> **【2010统考真题】**设将 $n(n > 1)$个整数存放到一维数组 $R$中。设计一个在时间和空间两方面都尽可能高效的算法。将 $R$中保存的序列循环左移 $p(0 < p < n)$个位置，即将 $R$中的数据由 $(X_0,X_1,\cdots,X_{n-1})$变换为  $(X_p,X_{p+1},\cdots ,X_{n-1},X_0,X_1,\cdots ,X_{p-1})$。要求：
+> **2010统考真题**：设将 $n(n > 1)$个整数存放到一维数组 $R$中。设计一个在时间和空间两方面都尽可能高效的算法。将 $R$中保存的序列循环左移 $p(0 < p < n)$个位置，即将 $R$中的数据由 $(X_0,X_1,\cdots,X_{n-1})$变换为  $(X_p,X_{p+1},\cdots ,X_{n-1},X_0,X_1,\cdots ,X_{p-1})$。要求：
 >
 > 1)给出算法的基本设计思想。
+>
 > 2)根据设计思想，采用`C或C++或Java语言`描述算法，关键之处给出注释。
+>
+> 3)说明你所设计算法的时间复杂度和空间复杂度。
+
+(1)算法的基本设计思想:可将这个问题视为把数组 $ab$转换成数组 $ba$( $a$代表数组的前 $p$个元素， $b$代表数组中余下的 $n-p$个元素)，先将 $a$逆置得到 $a^{-1}b$，再将 $b$逆置得到 $a^{-1}b^{-1}$，最后将整个 $a^{-1}b^{-1}$逆置得到$a^{-1}b^{-1}=ba$。设  $ReverseList$函数执行将数组元素逆置的操作，对 $abcdefgh$向左循环移动 $3$ ( $p =3$)个位置的过程如下:
+
+*  $ReverseList(0,p-1)$得到 $cbadefgh$;
+*  $ReverseList(p, n-1)$得到 $cbahgfed$;
+
+*  $ReverseList (0,n-1)$得到 $defghabc$;
+
+注:  $ReverseList$ 中，两个参数分别表示**数组中待转换元素的始末位置**。给出的代码是**起始位置和长度**
+
+(2)代码如下
+```cpp
+同2.2.8
+void ReverseList(SeqList &L,int start,int length)
+{
+    for(int i=0;i<length/2;i++)
+        swap(L.data[start+i],L.data[start+length-1-i]);
+}
+
+bool ChangeList(SeqList &L,int m,int n)//m为左半部分,n为右半部分
+{
+    if(L.length==0||m<=0||n<=0)
+        return false;
+    
+    ReverseList(L, 0, m);
+    ReverseList(L, m, n);
+    ReverseList(L, 0, m+n);
+    return true;
+}
+
+int len=11,m=5;
+int n=len-m;
+ChangeList(L, m, n);//左边部分长度,右边部分长度
+```
+
+(3) 每个 $ReverseList$函数的时间复杂度分别为 $O(m/2),O(n/2),O((n+m)/2)$[实际应用中为 $O(p/2),O((n-p)/2),O(n/2)$],总的时间复杂度为 $O(n+m)$[实际应用中为 $O(n)$],空间复杂度为 $O(1)$.
+
+#### 2.2.11
+
+> **2011统考真题**：一个长度为 $L(L \geq 1)$的升序序列 $S$，处在第 $\left \lceil L/2 \right \rceil$个位置的数称为 $S$的中位数。例如，若序列 $S_1=(11,13,15,17,19)$。则 $S$的中位数是 $15$，两个序列的中位数是含它们所有元素的升序序列的中位数。例如，若 $S_2=(2,4,6,8,20)$，则 $S_1$和 $S_2$的中位数是 $11$。现在有两个等长升序序列 $A$和 $B$，试设计一个在时间和空间两方面都尽可能高效的算法，找出两个序列 $A$和 $B$的中位数。要求:
+>
+> 1)给出算法的基本设计思想。
+>
+> 2)根据设计思想，采用`C或C++或Java语言`描述算法，关键之处给出注释。
+>
 > 3)说明你所设计算法的时间复杂度和空间复杂度。

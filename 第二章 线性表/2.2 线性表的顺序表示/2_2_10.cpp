@@ -2,8 +2,7 @@
 
 using namespace std;
 
-int a[]={0,25,12,3,9};
-int b[]={0,42,18,24,52,37,48,7};
+int a[]={0,25,12,3,9,42,18,24,52,37,48,7};
 
 #define InitSize 100
 
@@ -152,21 +151,19 @@ bool ChangeList(SeqList &L,int m,int n)//m为左半部分,n为右半部分
 
 void Test()
 {
-    int m=4,n=7;
-
+    int len=11,m=5;
+    int n=len-m;
     SeqList L;
     InitList(L);
 
     int cnt=0;
-    for(int i=1;i<=m;i++)
+    for(int i=1;i<=len;i++)
         ListInsert(L, ++cnt, a[i]);
-    for(int i=1;i<=n;i++)
-        ListInsert(L, ++cnt, b[i]);
     
 
     PrintList(L);
 
-    ChangeList(L, m, n);
+    ChangeList(L, m, n);//左边部分长度,右边部分长度
 
     PrintList(L);
 
