@@ -236,5 +236,122 @@ bool Delete_Elem(SqList &L,ElemType s,ElemType t)
 }
 ```
 
+#### 2.2.6
 
+>  从**有序顺序表**中删除所有其值重复的元素，使表中所有元素的值均不同。
 
+```cpp
+bool Delete_Same(SqList &L)
+{
+    if(L.length==0)
+        return false;
+    int cnt=0;
+
+    for(int i=0;i<L.length;i++)
+    {
+        int j=i;
+        while(j<L.length&&L.data[j]==L.data[i])
+            j++;
+        L.data[cnt++]=L.data[i];
+        i=j-1;
+    }
+
+    L.length=cnt;
+
+    return true;
+}
+```
+
+* **官方做法**
+
+```cpp
+bool Delete_Same(SqList &L)
+{
+	if(L.length==0) return false;
+	int i,j; //i存储第一个不相同的元素，j为工作指针 
+	for(i=0,j=1;j<L.length;j++)
+	    if(L.data[i]!=L.data[j]) //查找下一个与上个元素值不同的元素 
+	       L.data[++i]=L.data[j];  //找到后就将元素前移 
+	L.length = i+1; //因为i是从0开始的 
+	return true;
+}
+
+//自我做法
+bool Delete_Same(SqList &L)
+{
+	if(L.length==0) return false;
+	
+    int cnt=0;
+
+    L.data[cnt++]=L.data[0];
+
+    for(int i=1;i<L.length;i++)//注意i从1开始枚举
+        if(L.data[i]!=L.data[cnt-1])//注意是cnt-1(和官方有部分差异)
+        {
+            L.data[cnt++]=L.data[i];
+            //PrintList(L);
+        }
+    L.length=cnt;
+
+	return true;
+}
+```
+
+* **扩展**:假设数均为正数,且将**有序表**改为**无序表**,使用`散列表`(类似于**标记数组**),保证时间复杂度为 $O(n)$;若存在负数,标记数组设为有**偏移量**的标记数组即可
+
+```cpp
+#define MaxNumSize 1000010
+
+bool Delete_Same(SqList &L)
+{
+    if(L.length==0)
+        return false;
+    int vis[MaxNumSize]={0};
+    int cnt=0;
+
+    for(int i=0;i<L.length;i++)
+        if(vis[L.data[i]]==0)
+        {
+            vis[L.data[i]]=1;
+            L.data[cnt++]=L.data[i];
+        }
+    L.length=cnt;
+
+    return true;
+}
+```
+
+#### 2.2.7
+
+>  将两个有序顺序表合并为一个新的有序顺序表，并由函数返回结果顺序表。
+
+```cpp
+bool MergeList(SeqList A,SeqList B,SeqList &C)
+{
+    if(A.length+B.length>C.MaxSize)
+        return false;
+    
+    int i=0,j=0,cnt=0;
+
+    while(i<A.length&&j<B.length)
+    {
+        if(A.data[i]<=B.data[j])
+            C.data[cnt++]=A.data[i++];
+        else C.data[cnt++]=B.data[j++];
+    }
+
+    while(i<A.length)
+        C.data[cnt++]=A.data[i++];
+    
+    while(j<B.length)
+        C.data[cnt++]=B.data[j++];
+    
+    C.length=A.length+B.length;
+
+    return true;
+}
+```
+
+#### 2.2.8
+
+>  已知在一维数组 $A[m+n]$中依次存放两个线性表( $a_1,a_2,a_3,\cdots,a_m$)和( $b_1, b_2,b_3,\cdots,b_n$)。试编写一个函数，将数组中两个顺序表的位置互换，即将( $b_1,b_2,b_3,\cdots,b_n$)放在( $a_1,a_2,a_3,\cdots,a_m$)的前面。

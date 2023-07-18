@@ -85,104 +85,76 @@ void DestroyList(SqList &L)//销毁线性表
     ;//由于是数组可不用进行销毁
 }
 
-// bool Delete_Elem(SqList &L,ElemType s,ElemType t)
+// bool Delete_Same(SqList &L)
 // {
-//     if(/*Empty(L)==1*/L.length==0)//空表显示出错信息,并退出运行
-//     {
-//         cout << "空表,无法删除!" << endl;
+//     if(L.length==0)
 //         return false;
-//     }
-//     if(s>=t)
-//     {
-//         cout << "左区间应小于右区间" << endl;
-//         return false;
-//     }
-
 //     int cnt=0;
 
 //     for(int i=0;i<L.length;i++)
-//         if(L.data[i]<s||L.data[i]>t)
-//             L.data[cnt++]=L.data[i];
+//     {
+//         int j=i;
+//         while(j<L.length&&L.data[j]==L.data[i])
+//             j++;
+//         L.data[cnt++]=L.data[i];
+//         i=j-1;
+//     }
+
 //     L.length=cnt;
 
 //     return true;
 // }
 
-// bool Delete_Elem(SqList &L,ElemType s,ElemType t)
+// bool Delete_Same(SqList &L)
 // {
-//     if(/*Empty(L)==1*/L.length==0)//空表显示出错信息,并退出运行
-//     {
-//         cout << "空表,无法删除!" << endl;
-//         return false;
-//     }
-//     if(s>=t)
-//     {
-//         cout << "左区间应小于右区间" << endl;
-//         return false;
-//     }
-//     int cnt=0;
-
-//     for(int i=0;i<L.length;i++)
-//     {
-//         if(L.data[i]>=s&&L.data[i]<=t)
-//             cnt++;
-//         else L.data[i-cnt]=L.data[i];
-//     }
-//     L.length-=cnt;
-//     return true;
+// 	if(L.length==0) return false;
+// 	int i,j; //i存储第一个不相同的元素，j为工作指针 
+// 	for(i=0,j=1;j<L.length;j++)
+// 	    if(L.data[i]!=L.data[j]) //查找下一个与上个元素值不同的元素 
+// 	       L.data[++i]=L.data[j];  //找到后就将元素前移 
+// 	L.length = i+1; //因为i是从0开始的 
+// 	return true;
 // }
 
-bool Delete_Elem(SqList &L,ElemType s,ElemType t)
+bool Delete_Same(SqList &L)
 {
-    if(/*Empty(L)==1*/L.length==0)//空表显示出错信息,并退出运行
-    {
-        cout << "空表,无法删除!" << endl;
-        return false;
-    }
-    if(s>=t)
-    {
-        cout << "左区间应小于右区间" << endl;
-        return false;
-    }
-    
-    int l=0;
-    while(l<L.length&&L.data[l]<s)
-        l++;
-    // if(l>=L.length)
-    //     return false;
-    
-    int r=l;
-    while(r<L.length&&L.data[r]<=t)
-        r++;
-    
-    while(r<L.length)
-    {
-        L.data[l]=L.data[r];
-        l++,r++;
-    }
-    
-    L.length=l;
-    return true;
-}
+	if(L.length==0) return false;
+	
+    int cnt=0;
 
+    L.data[cnt++]=L.data[0];
+
+    for(int i=1;i<L.length;i++)//注意i从1开始枚举
+        if(L.data[i]!=L.data[cnt-1])//注意是cnt-1(和官方有部分差异)
+        {
+            L.data[cnt++]=L.data[i];
+            //PrintList(L);
+        }
+    L.length=cnt;
+
+	return true;
+}
 
 void Test()
 {
     SqList L;
 
     InitList(L);
-    ListInsert(L, 1, 5);
-    ListInsert(L, 2, 6);
-    ListInsert(L, 3, 8);
-    
-    ListInsert(L, 4, 10);
-    ListInsert(L, 5, 15);
-    ListInsert(L, 6, 20);
+    ListInsert(L, 1, 1);
+    ListInsert(L, 2, 2);
+    ListInsert(L, 3, 2);
+    ListInsert(L, 4, 2);
+    ListInsert(L, 5, 2);
+    ListInsert(L, 6, 3);
+    ListInsert(L, 7, 3);
+    ListInsert(L, 8, 3);
+    ListInsert(L, 9, 4);
+    ListInsert(L, 10, 4);
+    ListInsert(L, 11, 5);
 
     PrintList(L);
 
-    
-    Delete_Elem(L, 5, 15);
+    Delete_Same(L);
 
 
     PrintList(L);

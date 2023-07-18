@@ -4,6 +4,7 @@
 using namespace std;
 
 #define MaxSize 50
+#define MaxNumSize 1000010
 
 typedef int ElemType;
 
@@ -85,54 +86,23 @@ void DestroyList(SqList &L)//销毁线性表
     ;//由于是数组可不用进行销毁
 }
 
-// bool Delete_Elem(SqList &L,ElemType s,ElemType t)
-// {
-//     if(/*Empty(L)==1*/L.length==0)//空表显示出错信息,并退出运行
-//     {
-//         cout << "空表,无法删除!" << endl;
-//         return false;
-//     }
-//     if(s>=t)
-//     {
-//         cout << "左区间应小于右区间" << endl;
-//         return false;
-//     }
-
-//     int cnt=0;
-
-//     for(int i=0;i<L.length;i++)
-//         if(L.data[i]<s||L.data[i]>t)
-//             L.data[cnt++]=L.data[i];
-//     L.length=cnt;
-
-//     return true;
-// }
-
-bool Delete_Elem(SqList &L,ElemType s,ElemType t)
+bool Delete_Same(SqList &L)
 {
-    if(/*Empty(L)==1*/L.length==0)//空表显示出错信息,并退出运行
-    {
-        cout << "空表,无法删除!" << endl;
+    if(L.length==0)
         return false;
-    }
-    if(s>=t)
-    {
-        cout << "左区间应小于右区间" << endl;
-        return false;
-    }
+    int vis[MaxNumSize]={0};
     int cnt=0;
 
     for(int i=0;i<L.length;i++)
-    {
-        if(L.data[i]>=s&&L.data[i]<=t)
-            cnt++;
-        else L.data[i-cnt]=L.data[i];
-    }
-    L.length-=cnt;
+        if(vis[L.data[i]]==0)
+        {
+            vis[L.data[i]]=1;
+            L.data[cnt++]=L.data[i];
+        }
+    L.length=cnt;
+
     return true;
 }
-
-
 
 
 void Test()
@@ -140,17 +110,22 @@ void Test()
     SqList L;
 
     InitList(L);
-    ListInsert(L, 1, 86);
-    ListInsert(L, 2, 8);
-    ListInsert(L, 2, 5);
-    ListInsert(L, 1, 8);
-    ListInsert(L, 3, 8);
-    ListInsert(L, 3, 43);
+
+    ListInsert(L, 1, 1);
+    ListInsert(L, 2, 2);
+    ListInsert(L, 3, 2);
+    ListInsert(L, 4, 4);
+    ListInsert(L, 5, 2);
+    ListInsert(L, 6, 4);
+    ListInsert(L, 7, 7);
+    ListInsert(L, 8, 3);
+    ListInsert(L, 9, 4);
+    ListInsert(L, 10, 4);
+    ListInsert(L, 11, 5);
 
     PrintList(L);
 
-    
-    Delete_Elem(L, 5, 10);
+    Delete_Same(L);
 
 
     PrintList(L);
