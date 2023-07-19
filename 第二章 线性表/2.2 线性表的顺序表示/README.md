@@ -325,6 +325,7 @@ bool Delete_Same(SqList &L)
 
 >  将两个有序顺序表合并为一个新的有序顺序表，并由函数返回结果顺序表。
 
+时间复杂度为 $O(n)$
 ```cpp
 bool MergeList(SeqList A,SeqList B,SeqList &C)
 {
@@ -456,7 +457,6 @@ bool Binary_Search(SqList &L,ElemType e)
 
 *  $ReverseList(0,p-1)$得到 $cbadefgh$;
 *  $ReverseList(p, n-1)$得到 $cbahgfed$;
-
 *  $ReverseList (0,n-1)$得到 $defghabc$;
 
 注:  $ReverseList$ 中，两个参数分别表示**数组中待转换元素的始末位置**。给出的代码是**起始位置和长度**
@@ -497,3 +497,154 @@ ChangeList(L, m, n);//左边部分长度,右边部分长度
 > 2)根据设计思想，采用`C或C++或Java语言`描述算法，关键之处给出注释。
 >
 > 3)说明你所设计算法的时间复杂度和空间复杂度。
+
+* **方法一**:**归并排序**的思想,设 $A$和 $B$的长度均为 $n$,**合并两个数组**放入 $S$,找中位数 $S[n-1]$(注意下标从 $0$开始),时间复杂度为 $O(n)$,空间复杂度为 $O(n)$.
+
+```cpp
+bool Search_Median(SeqList L1,SeqList L2,int n,ElemType &e)//n为每个线性表的长度
+{
+    if(L1.length==0||L2.length==0||L1.length!=L2.length)
+        return false;
+    
+    ElemType *ans=(ElemType *)malloc(2*n*sizeof(ElemType));
+
+    int i=0,j=0,k=0;
+
+    while(i<n&&j<n)
+    {
+        if(L1.data[i]<=L2.data[j])
+            ans[k++]=L1.data[i++];
+        else ans[k++]=L2.data[j++];
+    }
+    while(i<n)
+        ans[k++]=L1.data[i++];
+    while(j<n)
+        ans[k++]=L2.data[j++];
+    
+    e=ans[n-1];
+
+    return true;
+}
+```
+
+* **方法二**:可发现方法一只需要扫 $n$个(**一半**)就可以结束.时间复杂度为 $O(n)$,空间复杂度为 $O(n)$,虽然只优化了部分空间,并没有降低太多时间复杂度.
+
+```cpp
+bool Search_Median(SeqList L1,SeqList L2,int n,ElemType &e)//n为每个线性表的长度
+{
+    if(L1.length==0||L2.length==0||L1.length!=L2.length)
+        return false;
+    
+    ElemType *ans=(ElemType *)malloc(n*sizeof(ElemType));
+
+    int i=0,j=0,k=0;
+
+    while(i<n&&j<n&&k<n)
+    {
+        if(L1.data[i]<=L2.data[j])
+            ans[k++]=L1.data[i++];
+        else ans[k++]=L2.data[j++];
+    }
+    while(i<n&&k<n)
+        ans[k++]=L1.data[i++];
+    while(j<n&&k<n)
+        ans[k++]=L2.data[j++];
+    
+    e=ans[n-1];
+
+    return true;
+}
+```
+
+* **方法三**:不用数组存储,直接在**方法二**每次更新它的值即可,时间复杂度为 $O(n)$,空间复杂度为 $O(1)$.
+
+```cpp
+bool Search_Median(SeqList L1,SeqList L2,int n,ElemType &e)//n为每个线性表的长度
+{
+    if(L1.length==0||L2.length==0||L1.length!=L2.length)
+        return false;
+
+    int i=0,j=0,k=0;
+
+    while(i<n&&j<n&&k<n)
+    {
+        if(L1.data[i]<=L2.data[j])
+            e=L1.data[i++];
+        else e=L2.data[j++];
+        k++;
+    }
+    while(i<n&&k<n)
+        e=L1.data[i++],k++;
+    while(j<n&&k<n)
+        e=L2.data[j++],k++;
+    
+    return true;
+}
+```
+
+* **方法4**(官方做法):思想类似于**二分**,时间复杂度为 $O(log_2 n)$,空间复杂度为 $O(1)$.
+
+分别求两个升序序列 $A$、 $B$的中位数，设为 $a$和 $b$，求序列 $A$、 $B$的中位数过程如下:
+
+* 若 $a = b$，则 $a$或 $b$即为所求中位数，算法结束。
+* 若 $a < b$，则舍弃序列 $A$中**较小**的一半，同时舍弃序列 $B$中**较大**的一半，要求两次舍弃的长度相等。
+
+* 若 $a > b$，则舍弃序列 $A$中**较大**的一半，同时舍弃序列 $B$中**较小**的--半，要求两次舍弃的长度相等。
+
+在保留的两个升序序列中，重复上述步骤，直到两个序列中均**只含一个元素时**为止，较小者即为所求的中位数。
+
+
+```cpp
+bool Search_Median(SeqList L1,SeqList L2,int n,ElemType &e)//n为每个线性表的长度
+{
+    if(L1.length==0||L2.length==0||L1.length!=L2.length)
+        return false;
+    
+    int l1=0,r1=n-1;//线性表L1的左右边界
+    int l2=0,r2=n-1;//线性表L2的左右边界
+
+    while(r1>l1)
+    {
+        int mid1=(l1+r1)/2;
+        int mid2=(l2+r2)/2;
+        //cout << l1 << " " << r1 << " " << mid1 << endl;
+        //cout << l2 << " " << r2 << " " << mid2 << endl;
+        if(L1.data[mid1]==L2.data[mid2])//相等,两者均为中位数
+        {
+            e=L1.data[mid1];
+            return true;
+        }
+        else if(L1.data[mid1]<L2.data[mid2])//x<y,把小于x和大于y的排除
+        {
+            if((r1-l1+1)%2==1)//奇数
+            {
+                l1=mid1;
+                r2=mid2;
+            }
+            else//偶数
+            {
+                l1=mid1+1;//当前mid不可能成为中位数
+                r2=mid2;
+            }
+        }
+        else//x>y,把大于x和小于y的排除
+        {
+            if((r1-l1+1)%2==1)//奇数
+            {
+                r1=mid1;
+                l2=mid2;
+            }
+            else//偶数
+            {
+                r1=mid1;
+                l2=mid2+1;//当前mid不可能成为中位数
+            }
+        }
+    }
+
+    e=min(L1.data[l1],L2.data[l2]);
+    
+    return true;
+}
+```
+
