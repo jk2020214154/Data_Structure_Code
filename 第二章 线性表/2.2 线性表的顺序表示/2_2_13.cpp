@@ -154,7 +154,7 @@ void Test()
 
     cout << Search_Min_Positive_Integer(L1, n) << endl;
     cout << Search_Min_Positive_Integer(L2, m) << endl;
-\left| \right|    
+
    
     
     DestroyList(L1);

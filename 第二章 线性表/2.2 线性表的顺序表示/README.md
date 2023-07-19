@@ -1,3 +1,5 @@
+### [github](https://github.com/jk2020214154/Data_Structure_Code/tree/master/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E7%BA%BF%E6%80%A7%E8%A1%A8/2.2%20%E7%BA%BF%E6%80%A7%E8%A1%A8%E7%9A%84%E9%A1%BA%E5%BA%8F%E8%A1%A8%E7%A4%BA)中有详尽代码可作参考
+
 #### 2.2.1 
 
 > 从顺序表中删除具有最小值的元素（假设唯一）并由函数返回被删元素的值。空出的位置由最后一个元素填补，若顺序表为空，则显示出错信息并退出运行。
@@ -737,7 +739,7 @@ int Search_Mode(SeqList L,int n)
 
 用**标记数组**记录对应是否在数组中存在,最后从头遍历正整数即可,时间复杂度为 $O(n)$,空间复杂度为 $O(n)$.
 
-要求在时间上尽可能高效，因此采用空问换时间的办法。分配一个用于标记的数组 $B[n]$,用来记录 $A$中是否出现了 $1 \sim n$中的正整数， $B[0]$对应正整数 $1$， $B[n-1]$对应正整数 $n$,初始化 $B$中全部为 $0$。由于 $A$中含有 $n$个整数，因此可能返回的值是 $1 \sim n+1$，当 $A$中 $n$个数恰好为 $1 \sim n$时返回 $n+1$。当数组 $A$中出现了小于等于 $0$或大于 $n$的值时,会导致$1 \sim n$中出现空余位置，返回结果必然在 $1 \sim n$中，因此对于 $A$中出现了小于等于 $0$或大于 $n$的值，可以不采取任何操作。(数组标记代码采用的是从 $1 \sim n$开始标记的,而不是从 $0 \sim n-1$开始的,此处单纯复制官方的思路)
+要求在时间上尽可能高效，因此采用空问换时间的办法。分配一个用于标记的数组 $B[n]$,用来记录 $A$中是否出现了 $1 \sim n$中的正整数， $B[0]$对应正整数 $1$， $B[n-1]$对应正整数 $n$,初始化 $B$中全部为 $0$。由于 $A$中含有 $n$个整数，因此可能返回的值是 $1 \sim n+1$，当 $A$中 $n$个数恰好为 $1 \sim n$时返回 $n+1$。当数组 $A$中出现了小于等于 $0$或大于 $n$的值时,会导致 $1 \sim n$中出现空余位置，返回结果必然在 $1 \sim n$中，因此对于 $A$中出现了小于等于 $0$或大于 $n$的值，可以不采取任何操作。(数组标记代码采用的是从 $1 \sim n$开始标记的,而不是从 $0 \sim n-1$开始的,此处单纯复制官方的思路)
 
 ```cpp
 //思想同2.2.12的方法一
@@ -773,4 +775,66 @@ int Search_Min_Positive_Integer(SeqList L,int n)
 > 2)根据设计思想，采用`C或C++或Java语言`描述算法，关键之处给出注释。
 >
 > 3)说明你所设计算法的时间复杂度和空间复杂度。
+
+* **方法一**:循环枚举每个数组的元素,构成三元组,找出最小值,时间复杂度为 $O(n^3)$,空间复杂度为 $O(1)$.
+
+```cpp
+int calc_dist(int x,int y,int z)
+{
+    return abs(x-y)+abs(y-z)+abs(z-x);
+}
+
+int Calc_Min_Dist(SeqList A,SeqList B,SeqList C)
+{
+    if(A.length==0||B.length==0||C.length==0)
+        return -1;
+    
+    int ans=calc_dist(A.data[0], B.data[0], C.data[0]);//初始值置为某一个值
+
+    for(int i=0;i<A.length;i++)
+        for(int j=0;j<B.length;j++)
+            for(int k=0;k<C.length;k++)
+                ans=min(ans,calc_dist(A.data[i], B.data[j], C.data[k]));
+    return ans;
+}
+```
+
+* **方法二**: **最小值的下标右移**会影响到最终的结果,时间复杂度为 $O(n)$,空间复杂度为 $O(1)$.
+
+[讲解链接](https://www.bilibili.com/video/BV13T411d7Sf?p=13&vd_source=576b1ffddbb7ecbebd4933bf3448fdcd)
+
+![](https://cdn.acwing.com/media/article/image/2023/07/19/85276_83840f8b26-QQ图片20230719175609.png) 
+
+```cpp
+int calc_dist(int x,int y,int z)
+{
+    return abs(x-y)+abs(y-z)+abs(z-x);
+}
+
+bool check_min(int a,int b,int c)
+{
+    return (a<=b&&a<=c);
+}
+
+int Calc_Min_Dist(SeqList A,SeqList B,SeqList C)
+{
+    if(A.length==0||B.length==0||C.length==0)
+        return -1;
+    int ans=calc_dist(A.data[0], B.data[0], C.data[0]);//初始值置为某一个值
+
+    int i=0,j=0,k=0;
+
+    while(i<A.length&&j<B.length&&k<C.length)
+    {
+        ans=min(ans,calc_dist(A.data[i], B.data[j], C.data[k]));
+
+        if(check_min(A.data[i], B.data[j], C.data[k]))
+            i++;
+        else if(check_min(B.data[j], A.data[i], C.data[k]))
+            j++;
+        else k++;
+    }
+    return ans;
+}
+```
 
