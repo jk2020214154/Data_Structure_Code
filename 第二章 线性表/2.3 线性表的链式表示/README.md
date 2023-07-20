@@ -419,7 +419,7 @@ void Divide_List(LinkList &L1,LinkList &L2)
 
 #### 2.3.11
 
-> 设 $C= $`{`  $a_1,b_1,a_2,b_2,\cdots,a_n,b_n$ `}`为线性表，采用带头结点的单链表存放，设计一个就地算法，将其拆分为两个线性表，使得 $A= $`{`$a_1,a_2,\cdots,a_n $ `}`, $B= $ `{` $b_n,\cdots,b_2,b_1 $`}`.
+> 设 $C= $ `{`  $a_1,b_1,a_2,b_2,\cdots,a_n,b_n$ `}`为线性表，采用带头结点的单链表存放，设计一个就地算法，将其拆分为两个线性表，使得 $A= $ `{` $a_1,a_2,\cdots,a_n$ `}`, $B= $  `{` $b_n,\cdots,b_2,b_1$ `}`.
 
 ```cpp
 void Divide_TwoList(LinkList L,LinkList &L1,LinkList &L2)
