@@ -252,3 +252,223 @@ LinkList Delete_Range_Elem(LinkList L,int l,int r)
 }
 ```
 
+#### 2.3.8
+
+> 给定两个单链表,编写算法找出两个链表的公共结点。
+
+* **方法一**:设两个单链表分别是 $L_1$, $L_2$,设它们的长度分别是 $len1$, $len2$,在第一个链表上顺序遍历每个结点,每遍历一个结点,在第二个链表上顺序遍历所有结点,若找到两个相同的结点(此处是**地址相同**,而不是 $data$**域相同**),则找到它们的公共结点。时间复杂度为 $O(len1 \times len2)$.
+
+```cpp
+void Search_Common_Node(LinkList L1,LinkList L2,LinkList &L)
+{
+    LNode *p1=L1,*p2=L2;
+    
+    while(p1!=NULL)
+    {
+        p2=L2;
+        while(p2!=NULL)
+        {
+            //cout << p1->data << " " << p2->data << endl;
+            if(p1==p2)
+            {
+                L->next=p1;
+                return ;
+            }
+            p2=p2->next;
+        }
+        p1=p1->next;
+        //cout << endl;
+    }
+}
+
+LinkList L;
+InitList(L);
+Search_Common_Node(L1, L2,L);
+```
+
+* **方法二**:在长的链表上先遍历长度之差个结点之后,再同步遍历两个链表,直到找到相同的结点或者一直到链表结束.时间复杂度为 $O(len1+len2)$(个人认为是 `O(max { len1,len2 })`).
+
+```cpp
+int Length(LinkList L)//求表的长度
+{
+    int len=0;
+    LNode *p=L->next;
+    while(p!=NULL)
+    {
+        p=p->next;
+        len++;
+    }
+    return len;
+}
+
+void Search_Common_Node(LinkList L1,LinkList L2,LinkList &L)
+{
+    int len1=Length(L1),len2=Length(L2);
+    int delta=abs(len1-len2);//长度差值
+    LNode *p1=L1->next,*p2=L2->next;
+
+    for(int i=1;i<=delta;i++)
+    {
+        if(len1>len2)//p1后移(l1长度大于L2)
+            p1=p1->next;
+        else//p2后移
+            p2=p2->next;
+    }
+
+    while(p1!=NULL)//公共长度部分
+    {
+        if(p1==p2)
+        {
+            L->next=p1;
+            return ;
+        }
+        p1=p1->next;
+        p2=p2->next;
+    }
+}
+
+LinkList L;
+InitList(L);
+Search_Common_Node(L1, L2,L);
+```
+
+#### 2.3.9
+
+> 给定一个带表头结点的单链表，设 $head$为头指针，结点结构为 $(data, next)$,  $data$为整型元素， $next$为指针，试写出算法:按递增次序输出单链表中各结点的数据元素，并释放结点所占的存储空间（要求:不允许使用数组作为辅助空间).
+
+对链表进行遍历,在每次遍历中找出整个链表的**最小值元素**,输出并释放结点所占空间;再查找次小值元素,输出并释放空间,直至链表为空.时间复杂度为 $O(n^2)$.由于题目限制,时间复杂度无法再降到更低.
+
+```cpp
+void Sort_And_Delete(LinkList &L)
+{
+    while(L->next!=NULL)
+    {
+        LNode *p=L->next,*pre=L;
+        LNode *p_min=L->next;//记录最小值的指针
+        LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
+        ElemType num;
+
+        while(p!=NULL)
+        {
+            if(p->data<p_min->data)
+            {
+                p_min=p;
+                pre_min=pre;
+            }
+            pre=p;
+            p=p->next;
+        }
+
+        pre_min->next=p_min->next;
+        num=p_min->data;
+        cout << num << " ";
+        free(p_min);
+    }
+    cout << endl;
+}
+```
+
+此处可借鉴`2.3.4`的查找最小值再释放的函数,如下:
+
+```cpp
+void Sort_And_Delete_short(LinkList &L)
+{
+    while(L->next!=NULL)
+    {
+        ElemType num;
+        Delete_Min_Elem(L, num);//使用2.3.4的函数
+        cout << num << " ";
+    }
+    cout << endl;
+}
+```
+
+#### 2.3.10
+
+> 将一个带头结点的单链表 $A$分解为两个带头结点的单链表 $A$和 $B$，使得 $A$表中含有原表中序号为**奇数**的元素,而 $B$表中含有原表中序号为**偶数**的元素，且保持其相对顺序不变。
+
+```cpp
+void Divide_List(LinkList &L1,LinkList &L2)
+{
+    int tot=1;
+
+    LNode *p1=L1;
+    LNode *p2=L2;
+    LNode *p=L1->next;
+    p1->next=NULL;//让L1置为空表
+
+    while(p!=NULL)
+    {
+        if(tot%2==1)//奇数
+        {
+            p1->next=p;
+            p1=p;
+        }
+        else//偶数
+        {
+            p2->next=p;
+            p2=p;
+        }
+        p=p->next;
+        tot++;
+    }
+    p1->next=NULL;
+    p2->next=NULL;
+}
+```
+
+#### 2.3.11
+
+> 设 $C= $`{` $ a_1,b_1,a_2,b_2,\cdots,a_n,b_n$ `}`为线性表，采用带头结点的单链表存放，设计一个就地算法，将其拆分为两个线性表，使得 $A= $`{` $a_1,a_2,\cdots,a_n $ `}`, $B= $ `{` $b_n,\cdots,b_2,b_1 $`}`.
+
+```cpp
+void Divide_TwoList(LinkList L,LinkList &L1,LinkList &L2)
+{
+    int tot=1;
+
+    LNode *p=L->next;
+    LNode *p1=L1;//尾插法
+    LNode *temp;//L2头插法,temp临时变量
+
+    while(p!=NULL)
+    {
+        if(tot%2==1)//尾插法
+        {
+            p1->next=p;
+            p1=p;
+            p=p->next;
+        }
+        else
+        {
+            temp=p->next;
+            p->next=L2->next;
+            L2->next=p;
+            p=temp;
+        }
+        tot++;
+    }
+    p1->next=NULL;//尾插法需置空
+}
+
+//可发现计数变量tot可不用
+void Divide_TwoList(LinkList L,LinkList &L1,LinkList &L2)
+{
+    LNode *p=L->next;
+    LNode *p1=L1;//尾插法
+    LNode *temp;//L2头插法,temp临时变量
+
+    while(p!=NULL)
+    {
+        p1->next=p;//L1尾插
+        p1=p;
+        p=p->next;
+
+        temp=p->next;//L2头插
+        p->next=L2->next;
+        L2->next=p;
+        p=temp;
+    }
+    p1->next=NULL;//尾插法需置空
+}
+```
+
