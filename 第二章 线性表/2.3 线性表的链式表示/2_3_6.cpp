@@ -249,6 +249,37 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
+void SortList(LinkList &L)
+{
+    LNode *p=L->next;//p指向第一个结点
+    LNode *r=p->next;//r记录p的后继
+    LNode *temp,*pre;//temp用于遍历,pre记录前驱
+    
+    p->next=NULL;//记得断链
+    p=r;//从第二个结点开始枚举
+
+    while(p!=NULL)
+    {
+        //cout << p->data << endl;
+        r=p->next;//更新r
+        
+        temp=L->next;//重头遍历(找到合适的位置)
+        pre=L;
+        while(temp!=NULL&&temp->data<p->data)
+        //跳过小于p的所有结点,在temp(此时temp的值大于p的值)的前面插入p结点
+        {
+            pre=temp;
+            temp=temp->next;
+        }
+        //前插p结点
+        p->next=temp;
+        pre->next=p;
+
+        p=r;//p后移
+        //PrintList(L);
+    }
+}
+
 
 
 void Test()
@@ -256,19 +287,16 @@ void Test()
     LinkList L;
     List_TailInsert(L);   
     /*
-        10 3 3 16 3 27 3 41 -1
+        10 3 3 16 2 27 3 41 -1
+        10 3 3 16 2 27 3 1 -1
+        0 3 3 16 2 27 3 41 -1
     */            
     PrintList(L);
-    InsertNextNode(GetElem(L, 3), 666);
+    
+    SortList(L);
+
+
     PrintList(L);           
-    InsertPriorNode(LocateElem(L, 666), 777);
-    PrintList(L);
-    ListInsert(L, 3, 888);
-    PrintList(L);
-    ElemType e = -1;
-    ListDelete(L, 5, e);
-    DeleteNode(GetElem(L, 2));
-    printf("表长=%d\n", Length(L));
     
     
     DestroyList(L);

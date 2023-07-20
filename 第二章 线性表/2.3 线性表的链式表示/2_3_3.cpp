@@ -249,6 +249,14 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
+void ReversePrint(LNode *p)
+{
+    if(p==NULL)//终止条件
+        return ;
+    
+    ReversePrint(p->next);
+    cout << p->data << " ";
+}
 
 
 void Test()
@@ -259,16 +267,10 @@ void Test()
         10 3 3 16 3 27 3 41 -1
     */            
     PrintList(L);
-    InsertNextNode(GetElem(L, 3), 666);
-    PrintList(L);           
-    InsertPriorNode(LocateElem(L, 666), 777);
-    PrintList(L);
-    ListInsert(L, 3, 888);
-    PrintList(L);
-    ElemType e = -1;
-    ListDelete(L, 5, e);
-    DeleteNode(GetElem(L, 2));
-    printf("表长=%d\n", Length(L));
+    
+    ReversePrint(L->next);//调用时使用第一个结点(而不是头结点)
+
+    cout << endl;
     
     
     DestroyList(L);

@@ -249,6 +249,29 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
+LinkList Delete_Min_Elem(LinkList L,ElemType &e)
+{
+    LNode *p=L->next,*pre=L;
+    LNode *p_min=L->next;//记录最小值的指针
+    LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
+
+    while(p!=NULL)
+    {
+        if(p->data<p_min->data)
+        {
+            p_min=p;
+            pre_min=pre;
+        }
+        pre=p;
+        p=p->next;
+    }
+
+    pre_min->next=p_min->next;
+    e=p_min->data;
+    free(p_min);
+
+    return L;
+}
 
 
 void Test()
@@ -256,19 +279,19 @@ void Test()
     LinkList L;
     List_TailInsert(L);   
     /*
-        10 3 3 16 3 27 3 41 -1
+        10 3 3 16 2 27 3 41 -1
+        10 3 3 16 2 27 3 1 -1
+        0 3 3 16 2 27 3 41 -1
     */            
     PrintList(L);
-    InsertNextNode(GetElem(L, 3), 666);
+    
+    ElemType num;
+    L=Delete_Min_Elem(L, num);
+
+    cout << num << endl;
+
+
     PrintList(L);           
-    InsertPriorNode(LocateElem(L, 666), 777);
-    PrintList(L);
-    ListInsert(L, 3, 888);
-    PrintList(L);
-    ElemType e = -1;
-    ListDelete(L, 5, e);
-    DeleteNode(GetElem(L, 2));
-    printf("表长=%d\n", Length(L));
     
     
     DestroyList(L);

@@ -249,6 +249,45 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
+// LinkList ReverseList(LinkList L)
+// {
+//     LNode *p=L->next;
+//     LNode *r;//r为p的后继,防止中间处理时断链
+//     L->next=NULL;//让L与结点断开
+//     while(p!=NULL)
+//     {
+//         r=p->next;//保存p的后继结点
+        
+//         //头插法插入结点
+//         p->next=L->next;
+//         L->next=p;
+
+//         p=r;//p指针后移
+//     }
+
+//     return L;
+// }
+
+LinkList ReverseList(LinkList L)
+{
+    LNode *pre;
+    LNode *p=L->next;
+    LNode *r=p->next;//r为p的后继,防止中间处理时断链
+    
+    p->next=NULL;//处理第一个结点
+    while(r!=NULL)
+    {
+        pre=p;
+        p=r;
+        r=r->next;
+        p->next=pre;//指针反指
+
+    }
+
+    L->next=p;//处理最后一个结点
+
+    return L;
+}
 
 
 void Test()
@@ -256,19 +295,16 @@ void Test()
     LinkList L;
     List_TailInsert(L);   
     /*
-        10 3 3 16 3 27 3 41 -1
+        10 3 3 16 2 27 3 41 -1
+        10 3 3 16 2 27 3 1 -1
+        0 3 3 16 2 27 3 41 -1
     */            
     PrintList(L);
-    InsertNextNode(GetElem(L, 3), 666);
+    
+    L=ReverseList(L);
+
+
     PrintList(L);           
-    InsertPriorNode(LocateElem(L, 666), 777);
-    PrintList(L);
-    ListInsert(L, 3, 888);
-    PrintList(L);
-    ElemType e = -1;
-    ListDelete(L, 5, e);
-    DeleteNode(GetElem(L, 2));
-    printf("表长=%d\n", Length(L));
     
     
     DestroyList(L);

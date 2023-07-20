@@ -249,6 +249,26 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
+LinkList Delete_Range_Elem(LinkList L,int l,int r)
+{
+    LNode *p=L->next,*pre=L;
+    while(p!=NULL)
+    {
+        if(p->data>l&&p->data<r)
+        {
+            //此处可不用新开一个结点指针,由于pre的next更新后就已知指针p的下一个next
+            pre->next=p->next;//前驱结点的next更新
+            free(p);//释放
+            p=pre->next;//p指针为pre的next
+        }
+        else
+        {
+            pre=p;
+            p=p->next;           
+        }
+    }
+    return L;
+}
 
 
 void Test()
@@ -256,19 +276,16 @@ void Test()
     LinkList L;
     List_TailInsert(L);   
     /*
-        10 3 3 16 3 27 3 41 -1
+        10 3 3 16 2 27 3 41 -1
+        10 3 3 16 2 27 3 1 -1
+        0 3 3 16 2 27 3 41 -1
     */            
     PrintList(L);
-    InsertNextNode(GetElem(L, 3), 666);
+    
+    L=Delete_Range_Elem(L, 3, 20);
+
+
     PrintList(L);           
-    InsertPriorNode(LocateElem(L, 666), 777);
-    PrintList(L);
-    ListInsert(L, 3, 888);
-    PrintList(L);
-    ElemType e = -1;
-    ListDelete(L, 5, e);
-    DeleteNode(GetElem(L, 2));
-    printf("表长=%d\n", Length(L));
     
     
     DestroyList(L);

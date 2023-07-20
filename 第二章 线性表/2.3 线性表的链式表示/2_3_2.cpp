@@ -249,7 +249,51 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
+// void Delete_Same(LinkList &L,ElemType e)
+// {
+//     LNode *p=L->next,*pre=L;
+//     LNode *q;//临时变量用来释放
 
+//     while(p!=NULL)//从头遍历
+//     {
+//         if(p->data==e)
+//         {
+//             q=p;//临时存储当前结点
+//             pre->next=p->next;//将q结点与链表断开
+//             p=p->next;//p指针后移
+//             //pre不变
+//             free(q);
+//         }
+//         else
+//         {
+//             pre=p;//同步后移
+//             p=p->next;
+//         }
+//     }
+// }
+
+
+void Delete_Same(LinkList &L,ElemType e)
+{
+    LNode *p=L->next,*r=L;//此处r是尾指针
+    LNode *q;//临时变量用来释放
+
+    while(p!=NULL)//从头遍历
+    {
+        if(p->data==e)//相等释放
+        {
+            q=p;
+            p=p->next;
+            free(q);
+        }
+        else
+        {//将其重新链接到链表中
+            r->next=p;
+            r=p;
+            p=p->next;
+        }
+    }
+}
 
 void Test()
 {
@@ -259,17 +303,11 @@ void Test()
         10 3 3 16 3 27 3 41 -1
     */            
     PrintList(L);
-    InsertNextNode(GetElem(L, 3), 666);
-    PrintList(L);           
-    InsertPriorNode(LocateElem(L, 666), 777);
-    PrintList(L);
-    ListInsert(L, 3, 888);
-    PrintList(L);
-    ElemType e = -1;
-    ListDelete(L, 5, e);
-    DeleteNode(GetElem(L, 2));
-    printf("表长=%d\n", Length(L));
     
+    Delete_Same(L, 3);
+
+
+    PrintList(L);           
     
     DestroyList(L);
 }
