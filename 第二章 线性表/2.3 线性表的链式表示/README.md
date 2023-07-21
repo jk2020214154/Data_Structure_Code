@@ -883,3 +883,136 @@ LinkList Locate(LinkList &L,ElemType e)//此处前驱用prior,此处的pre与题
 > 2)根据设计思想，采用`C或C++或Java语言`描述算法，关键之处给出注释。
 >
 > 3)说明你所设计算法的时间复杂度和空间复杂度。
+
+> **解释**:快慢指针
+>
+> 首先创建两个指针 $1$和 $2$，同时指向这个链表的头节点。然后开始一个大循环，在循环体中，让指针 $1$每次向下移动一个节点，让指针 $2$每次向下移动两个节点，然后**比较两个指针指向的节点是否相同**。如果相同，则判断出链表有环，如果不同，则继续下一次循环。
+>
+> 例如链表`A->B->C->D->B->C->D`，两个指针最初都指向节点 $A$，进入第一轮循环，指针 $1$移动到了节点 $B$，指针 $2$移动到了 $C$。第二轮循环，指针 $1$移动到了节点 $C$，指针 $2$移动到了节点 $B$。第三轮循环，指针 $1$移动到了节点 $D$，指针 $2$移动到了节点 $D$，此时两指针指向同一节点，判断出链表有环。
+>
+> 此方法也可以用一个更生动的例子来形容：在一个环形跑道上，两个运动员在同一地点起跑，一个运动员速度快，一个运动员速度慢。当两人跑了一段时间，速度快的运动员必然会从速度慢的运动员身后再次追上并超过，原因很简单，因为跑道是环形的。
+
+* 判断是否成环,使用一个慢指针 $slow$走一步,快指针 $fast$走两步,若相遇则说明存在环.
+
+```cpp
+bool Judge_Loop(LinkList L)
+{
+    LNode *slow=L->next,*fast=L->next;//指向第一个结点
+    
+    while(fast!=NULL&&fast->next!=NULL)
+    {
+        slow=slow->next;//slow走一步
+        fast=fast->next->next;//fast走两步
+
+        if(slow==fast)//相遇
+            break;
+    }
+
+    if(fast==NULL||fast->next==NULL)
+        return false;
+    else return true;
+}
+```
+![IMG_20230721_225720_edit_891521494116462.jpg](https://cdn.acwing.com/media/article/image/2023/07/21/85276_178a07a427-IMG_20230721_225720_edit_891521494116462.jpg) 
+
+* 若要找到**环的入口**,代码如下:
+
+```cpp
+LNode* Judge_Loop(LinkList L)
+{
+    LNode *slow=L,*fast=L;
+    
+    while(fast!=NULL&&fast->next!=NULL)
+    {
+        slow=slow->next;//slow走一步
+        fast=fast->next->next;//fast走两步
+
+        if(slow==fast)//相遇
+            break;
+    }
+
+    if(fast==NULL||fast->next==NULL)
+        return NULL;
+    
+    LNode *p1=L,*p2=fast;//头,fast为相交的地方,当两者相遇时,即为环的入口
+    while(p1!=p2)
+    {
+        p1=p1->next;
+        p2=p2->next;
+    }
+    return p1;
+}
+```
+
+时间复杂度为 $O(n)$,空间复杂度为 $O(1)$.
+
+
+
+#### 2.3.22
+
+>  **2009统考真题**：已知一个带有表头结点的单链表，结点结构为
+>
+> | $data$ | $link$ |
+> | :----: | :----: |
+>
+> 假设该链表只给出了头指针 $list$。在不改变链表的前提下，请设计一个尽可能高效的算法，查找链表中倒数第 $k$个位置上的结点（ $k$为正整数)。若查找成功，算法输出该结点的 $data$域的值,并返回 $1$;否则，只返回 $0$。要求:
+>
+> 1）描述算法的基本设计思想.
+>
+> 2）描述算法的详细实现步骤。
+>
+> 3）根据设计思想和实现步骤，采用程序设计语言描述算法（使用`C、C++或Java语言`实现)，关键之处请给出简要注释.
+
+* **方法一**:先查询链表的长度 $len$,再从头跑 $len-k+1$次即可找到,注意 $k$可能大于长度 $len$.时间复杂度为 $O(n)$
+
+```cpp
+int Search_k(LinkList list,int k,ElemType &e)
+{
+    int len=Length(list);
+
+    if(k>len)//超过长度
+        return 0;
+    
+    LNode *p=list;
+
+    for(int i=1;i<=len-k+1;i++)
+        p=p->link;
+    e=p->data;
+    return 1;
+}
+```
+
+* **方法二**:设置两个指针 $p_1$和 $p_2$,让两者的距离始终为 $k$,当后面的指针到达尾部,此时前面的指针即为所求.
+![QQ图片20230721233122.png](https://cdn.acwing.com/media/article/image/2023/07/21/85276_ab675fda27-QQ图片20230721233122.png) 
+```cpp
+int Search_k(LinkList list,int k,ElemType &e)
+{
+    if(k<=0)
+        return 0;
+    LNode *p1=list->link,*p2=list->link;
+    int cnt=0;
+
+    while(p2!=NULL&&cnt<k)
+    {
+        p2=p2->link;
+        cnt++;
+    }
+    
+    //cout << p2->data << endl;
+    //cout << cnt << endl;
+
+    if(cnt<k)//未找到p2
+        return 0;
+    
+    while(p2!=NULL)//同步后移
+    {
+        p1=p1->link;
+        p2=p2->link;
+    }
+
+    e=p1->data;
+
+    return 1;
+}
+```
+
