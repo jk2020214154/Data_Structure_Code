@@ -11,21 +11,62 @@ typedef struct LNode{
 }LNode,*LinkList;
 
 
-bool InitList(LinkList &L)//初始化一个单链表(带头结点)
+bool InitList(LinkList &L)//初始化一个循环单链表(带头结点)
 {
     L=(LNode *)malloc(sizeof(LNode));
     if(L==NULL)
         return false;
-    L->next=NULL;
+    L->next=L;//自己的后继指向自己
     return true;
 }
 
-bool Empty(LinkList L)//判断单链表是否为空
+bool Empty(LinkList L)//判断循环单链表是否为空
 {
-    if(L->next==NULL)
+    if(L->next==L)
         return true;
     else return false;
 }
+
+int Length(LinkList L)//求表的长度
+{
+    int len=0;
+    LNode *p=L->next;
+    while(p!=L)
+    {
+        p=p->next;
+        len++;
+    }
+    return len;
+}
+
+LNode * GetElem(LinkList L,int i)//按位查找操作：返回第i个元素
+{
+    if(i<0)
+        return NULL;
+    else if(i==0)
+        return L;
+    LNode *p=L->next;//L指向第一个结点
+    int j=1;
+    while(p!=L&&j<i)//循环找到第i个结点
+    {
+        p=p->next;
+        j++;
+    }
+    if(p==L)//都未找到
+        return NULL;
+    return p;
+}
+
+LNode * LocateElem(LinkList L,ElemType e)//按值查找操作：找到数据域==e的结点
+{
+    LNode *p=L->next;//从第1个结点开始查找数据域为e的结点
+    while(p!=L&&p->data!=e)
+        p=p->next;
+    if(p==L)//都未找到
+        return NULL;
+    return p;//找到后返回该结点指针,否则返回NULL
+}
+
 
 bool InsertNextNode(LNode *p,ElemType e)//指定结点的后插操作:在p结点之后插入元素e
 {
@@ -40,6 +81,14 @@ bool InsertNextNode(LNode *p,ElemType e)//指定结点的后插操作:在p结点
     s->next=p->next;
     p->next=s;//将结点s连到p之后
     return true;
+}
+
+bool ListInsert(LinkList &L,int i,ElemType e)//按位序插入操作(封装)：在表L中的第i个位置上插入指定元素e
+{
+    if(i<1)
+        return false;
+    LNode *p=GetElem(L, i-1);
+    return InsertNextNode(p, e);
 }
 
 bool InsertPriorNode(LNode *p,ElemType e)//指定结点的前插操作：在p结点之前插入元素e
@@ -57,78 +106,26 @@ bool InsertPriorNode(LNode *p,ElemType e)//指定结点的前插操作：在p结
     return true;
 }
 
-
-LNode * GetElem(LinkList L,int i)//按位查找操作：返回第i个元素
+bool InsertPriorLNode(LNode *p,LNode *s)//指定结点的前插操作：在p结点之前插入结点s
 {
-    if(i<0)
-        return NULL;
-    LNode *p=L;//L指向头结点,头结点是第0个结点
-    int j=0;
-    while(p!=NULL&&j<i)//循环找到第i个结点
-    {
-        p=p->next;
-        j++;
-    }
-    return p;
-}
-
-LNode * LocateElem(LinkList L,ElemType e)//按值查找操作：找到数据域==e的结点
-{
-    LNode *p=L->next;//从第1个结点开始查找数据域为e的结点
-    while(p!=NULL&&p->data!=e)
-        p=p->next;
-    return p;//找到后返回该结点指针,否则返回NULL
-}
-
-bool ListInsert(LinkList &L,int i,ElemType e)//按位序插入操作：在表L中的第i个位置上插入指定元素e
-{
-    if(i<1)
-        return false;
-    LNode *p=L;//L指向头结点,头结点是第0个结点
-    int j=0;
-    while(p!=NULL&&j<i-1)//循环找到第i-1个结点
-    {
-        p=p->next;
-        j++;
-    }
-
-    if(p==NULL)//i值不合法
-        return false;
-    LNode *s=(LNode *)malloc(sizeof(LNode));
-
-    if(s==NULL)
+    if(p==NULL||s==NULL)
         return false;
     
-    s->data=e;//用结点s保存数据元素e
     s->next=p->next;
-    p->next=s;//将结点s连到p之后
+    p->next=s;
+    swap(s->data,p->data);//后插,然后交换元素
     return true;
 }
 
-bool ListInsert_short(LinkList &L,int i,ElemType e)//按位序插入操作(封装)：在表L中的第i个位置上插入指定元素e
+bool ListDelete(LinkList &L,int i,ElemType &e)//按位序删除操作(封装)：删除表L中第i个位置的元素，并用e返回删除元素的值
 {
     if(i<1)
         return false;
     LNode *p=GetElem(L, i-1);
-    return InsertNextNode(p, e);
-}
-
-bool ListDelete(LinkList &L,int i,ElemType &e)//按位序删除操作：删除表L中第i个位置的元素，并用e返回删除元素的值
-{
-    if(i<1)
-        return false;
-    LNode *p=L;//L指向头结点,头结点是第0个结点
-    int j=0;
-    while(p!=NULL&&j<i-1)//循环找到第i-1个结点
-    {
-        p=p->next;
-        j++;
-    }
-
     if(p==NULL)//i值不合理
         return false;    
     
-    if(p->next==NULL)//第i-1个结点之后已无其他结点
+    if(p->next==L)//第i-1个结点之后已无其他结点(指向头结点)
         return false;
     
     LNode *s=p->next;//令s指向被删除元素
@@ -138,26 +135,7 @@ bool ListDelete(LinkList &L,int i,ElemType &e)//按位序删除操作：删除�
     return true;
 }
 
-bool ListDelete_short(LinkList &L,int i,ElemType &e)//按位序删除操作(封装)：删除表L中第i个位置的元素，并用e返回删除元素的值
-{
-    if(i<1)
-        return false;
-    LNode *p=GetElem(L, i-1);
-    if(p==NULL)//i值不合理
-        return false;    
-    
-    if(p->next==NULL)//第i-1个结点之后已无其他结点
-        return false;
-    
-    LNode *s=p->next;//令s指向被删除元素
-    e=s->data;//用e返回元素的值
-    p->next=s->next;//将*s结点从链中断开
-    free(s);//释放结点
-    return true;
-}
-
-
-bool DeleteNode(LNode *p)//指定结点的删除操作：删除指定结点p
+bool DeleteNode(LinkList &L,LNode *p)//指定结点的删除操作：删除指定结点p
 {
     if(p==NULL)
         return false;
@@ -165,23 +143,14 @@ bool DeleteNode(LNode *p)//指定结点的删除操作：删除指定结点p
     p->data=p->next->data;
     //和后继结点交换数据域, 若p结点刚好是表L的最后一个结点, 此处会出错, 只能考虑从表头开始依次寻找p的前驱结点
     p->next=s->next;//将*s结点从链中断开
+
+    if(L==s)//如果p的后继结点是头结点
+        L=p;//让头结点指向原来头结点的后继结点(删除头结点)
     free(s);
     return true;
 }
 
-int Length(LinkList L)//求表的长度
-{
-    int len=0;
-    LNode *p=L->next;
-    while(p!=NULL)
-    {
-        p=p->next;
-        len++;
-    }
-    return len;
-}
-
-LinkList List_TailInsert(LinkList &L)//尾插法建立单链表
+LinkList List_TailInsert(LinkList &L)//尾插法建立循环单链表
 {
     ElemType e;
     if(InitList(L)==false)//初始化空链表
@@ -201,12 +170,11 @@ LinkList List_TailInsert(LinkList &L)//尾插法建立单链表
         r=s;//r指向新的表尾结点
         cin >> e;
     }
-    r->next=NULL;//尾结点指针置空
+    r->next=L;//尾结点指针置为L
     return L;
 }
 
-
-LinkList List_HeadInsert(LinkList &L)//头插法建立单链表
+LinkList List_HeadInsert(LinkList &L)//头插法建立循环单链表
 {
     ElemType e;
     if(InitList(L)==false)//初始化空链表
@@ -229,10 +197,10 @@ LinkList List_HeadInsert(LinkList &L)//头插法建立单链表
     return L;
 }
 
-void PrintList(LinkList L)//打印单链表
+void PrintList(LinkList L)//打印循环单链表
 {
     LNode *p=L->next;
-    while(p!=NULL)
+    while(p!=L)
     {
         cout << p->data << " ";
         p=p->next;
@@ -240,25 +208,35 @@ void PrintList(LinkList L)//打印单链表
     cout << endl;
 }
 
-void DestroyList(LinkList &L)//释放单链表
+void Destroy(LinkList L,LNode *p)//递归释放(辅助函数)
 {
-    if(L!=NULL)
+    if(p->next!=L)
     {
-        DestroyList(L->next);
-        free(L);
+        Destroy(L, p->next);
+        free(p);
     }
 }
 
+void DestroyList(LinkList &L)//释放循环单链表
+{
+    LNode *p=L->next;
+    if(p==L)
+        free(p);
+    else
+        Destroy(L, p);
+}
+
+
 void Sort_And_Delete(LinkList &L)
 {
-    while(L->next!=NULL)
+    while(L->next!=L)
     {
         LNode *p=L->next,*pre=L;
         LNode *p_min=L->next;//记录最小值的指针
         LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
         ElemType num;
 
-        while(p!=NULL)
+        while(p!=L)
         {
             if(p->data<p_min->data)
             {
@@ -278,13 +256,14 @@ void Sort_And_Delete(LinkList &L)
 }
 
 
-LinkList Delete_Min_Elem(LinkList L,ElemType &e)
+
+LinkList Delete_Min_Elem(LinkList L,ElemType &e)//辅助函数
 {
     LNode *p=L->next,*pre=L;
     LNode *p_min=L->next;//记录最小值的指针
     LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
 
-    while(p!=NULL)
+    while(p!=L)
     {
         if(p->data<p_min->data)
         {
@@ -304,14 +283,16 @@ LinkList Delete_Min_Elem(LinkList L,ElemType &e)
 
 void Sort_And_Delete_short(LinkList &L)
 {
-    while(L->next!=NULL)
+    while(L->next!=L)
     {
         ElemType num;
         Delete_Min_Elem(L, num);
         cout << num << " ";
     }
     cout << endl;
+    free(L);
 }
+
 
 
 void Test()
@@ -326,11 +307,11 @@ void Test()
     PrintList(L);
     
     //Sort_And_Delete(L);
-    Sort_And_Delete_short(L);
+    //Sort_And_Delete_short(L);
 
     //PrintList(L);           
     
-    DestroyList(L);
+    //DestroyList(L);
 }
 
 

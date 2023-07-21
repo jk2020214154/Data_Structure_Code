@@ -249,93 +249,116 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
-void Sort_And_Delete(LinkList &L)
+void Divide_List(LinkList &L1,LinkList &L2)
 {
-    while(L->next!=NULL)
-    {
-        LNode *p=L->next,*pre=L;
-        LNode *p_min=L->next;//记录最小值的指针
-        LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
-        ElemType num;
+    int tot=1;
 
-        while(p!=NULL)
-        {
-            if(p->data<p_min->data)
-            {
-                p_min=p;
-                pre_min=pre;
-            }
-            pre=p;
-            p=p->next;
-        }
-
-        pre_min->next=p_min->next;
-        num=p_min->data;
-        cout << num << " ";
-        free(p_min);
-    }
-    cout << endl;
-}
-
-
-LinkList Delete_Min_Elem(LinkList L,ElemType &e)
-{
-    LNode *p=L->next,*pre=L;
-    LNode *p_min=L->next;//记录最小值的指针
-    LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
+    LNode *p1=L1;
+    LNode *p2=L2;
+    LNode *p=L1->next;
+    p1->next=NULL;//让L1置为空表
 
     while(p!=NULL)
     {
-        if(p->data<p_min->data)
+        if(tot%2==1)//奇数
         {
-            p_min=p;
-            pre_min=pre;
+            p1->next=p;
+            p1=p;
         }
-        pre=p;
+        else//偶数
+        {
+            p2->next=p;
+            p2=p;
+        }
         p=p->next;
+        tot++;
     }
-
-    pre_min->next=p_min->next;
-    e=p_min->data;
-    free(p_min);
-
-    return L;
+    p1->next=NULL;
+    p2->next=NULL;
 }
 
-void Sort_And_Delete_short(LinkList &L)
+
+void Search_Intersection(LinkList &L1,LinkList &L2)
 {
-    while(L->next!=NULL)
+    LNode *p1=L1->next;
+    LNode *p2=L2->next;
+    LNode *r=L1,*q;//r为尾指针,q为临时变量
+
+    while(p1!=NULL&&p2!=NULL)
     {
-        ElemType num;
-        Delete_Min_Elem(L, num);
-        cout << num << " ";
+        if(p1->data==p2->data)
+        {
+            r->next=p1;//后插
+            r=p1;
+            
+            p1=p1->next;//p1后移
+
+            q=p2;
+            p2=p2->next;//p2后移
+
+            free(q);//释放
+        }
+        else if(p1->data<p2->data)
+        {
+            q=p1;
+            p1=p1->next;
+            free(q);
+        }
+        else
+        {
+            q=p2;
+            p2=p2->next;
+            free(q);
+        }
     }
-    cout << endl;
+
+    while(p1!=NULL)//释放p1剩下的
+    {
+        q=p1;
+        p1=p1->next;
+        free(q);        
+    }
+
+    while(p2!=NULL)
+    {
+        q=p2;
+        p2=p2->next;
+        free(q);        
+    }
+
+    r->next=NULL;
+
+    L2->next=NULL;
 }
 
 
 void Test()
 {
-    LinkList L;
-    List_TailInsert(L);   
+    LinkList A,B;
+    List_TailInsert(A);
+    List_TailInsert(B);
     /*
-        10 3 3 16 3 27 3 41 -1
-        
-        3 1 2 4 5 -1
+        1 2 5 6 7 8 10 16 -1
+        2 4 5 8 10 17 -1
     */            
-    PrintList(L);
+    PrintList(A);
+    PrintList(B);
     
-    //Sort_And_Delete(L);
-    Sort_And_Delete_short(L);
+    Search_Intersection(A,B);//最终的结果存储在第一个链表中
+    
 
-    //PrintList(L);           
+    PrintList(A);
+    PrintList(B);
     
-    DestroyList(L);
+    cout << "-----" << endl;
+    DestroyList(A);
+    DestroyList(B);
 }
 
 
 int main()
 {
     Test();
-    return 0;
+    return 0; 
 }
+

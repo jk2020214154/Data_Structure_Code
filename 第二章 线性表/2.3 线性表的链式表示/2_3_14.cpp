@@ -249,87 +249,52 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
-void Sort_And_Delete(LinkList &L)
-{
-    while(L->next!=NULL)
-    {
-        LNode *p=L->next,*pre=L;
-        LNode *p_min=L->next;//记录最小值的指针
-        LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
-        ElemType num;
 
-        while(p!=NULL)
+void MergeList(LinkList &L1,LinkList &L2,LinkList &L)//此处L1,L2可引用也可不引用
+{
+    LNode *p1=L1->next,*p2=L2->next;
+    LNode *r=L;//尾指针
+    while(p1!=NULL&&p2!=NULL)
+    {
+        if(p1->data==p2->data)//相等,分配空间
         {
-            if(p->data<p_min->data)
-            {
-                p_min=p;
-                pre_min=pre;
-            }
-            pre=p;
-            p=p->next;
+            LNode *s=(LNode *)malloc(sizeof(LNode));
+            s->data=p1->data;
+            r->next=s;
+            r=s;
+            p1=p1->next;
+            p2=p2->next;
         }
-
-        pre_min->next=p_min->next;
-        num=p_min->data;
-        cout << num << " ";
-        free(p_min);
+        else if(p1->data<p2->data)//p1后移
+            p1=p1->next;
+        else p2=p2->next;//p2后移
     }
-    cout << endl;
-}
-
-
-LinkList Delete_Min_Elem(LinkList L,ElemType &e)
-{
-    LNode *p=L->next,*pre=L;
-    LNode *p_min=L->next;//记录最小值的指针
-    LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
-
-    while(p!=NULL)
-    {
-        if(p->data<p_min->data)
-        {
-            p_min=p;
-            pre_min=pre;
-        }
-        pre=p;
-        p=p->next;
-    }
-
-    pre_min->next=p_min->next;
-    e=p_min->data;
-    free(p_min);
-
-    return L;
-}
-
-void Sort_And_Delete_short(LinkList &L)
-{
-    while(L->next!=NULL)
-    {
-        ElemType num;
-        Delete_Min_Elem(L, num);
-        cout << num << " ";
-    }
-    cout << endl;
+    r->next=NULL;
 }
 
 
 void Test()
 {
+    LinkList L1,L2;
     LinkList L;
-    List_TailInsert(L);   
+    InitList(L);
+    List_TailInsert(L1);
+    List_TailInsert(L2);   
     /*
-        10 3 3 16 3 27 3 41 -1
-        
-        3 1 2 4 5 -1
+        1 2 5 6 7 8 10  16 -1
+        2 4 5 8 10 17 -1
     */            
-    PrintList(L);
-    
-    //Sort_And_Delete(L);
-    Sort_And_Delete_short(L);
+    PrintList(L1);
+    PrintList(L2);
 
-    //PrintList(L);           
+    MergeList(L1, L2, L);
+
+    PrintList(L);
+    PrintList(L1);
+    PrintList(L2);
     
+    DestroyList(L1);
+    DestroyList(L2);
     DestroyList(L);
 }
 

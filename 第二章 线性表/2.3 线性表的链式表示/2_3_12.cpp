@@ -249,86 +249,61 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
-void Sort_And_Delete(LinkList &L)
+// void DeleteSameElem(LinkList &L)
+// {
+//     LNode *p=L->next;
+
+//     if(p==NULL)//空表不用处理
+//         return ;
+
+//     while(p->next!=NULL)
+//     {
+//         LNode *q=p->next;
+//         if(p->data==q->data)//删除后继相等结点
+//         {
+//             p->next=q->next;
+//             free(q);
+//         }
+//         else p=p->next;
+//     }
+// }
+
+void DeleteSameElem(LinkList &L)
 {
-    while(L->next!=NULL)
-    {
-        LNode *p=L->next,*pre=L;
-        LNode *p_min=L->next;//记录最小值的指针
-        LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
-        ElemType num;
-
-        while(p!=NULL)
-        {
-            if(p->data<p_min->data)
-            {
-                p_min=p;
-                pre_min=pre;
-            }
-            pre=p;
-            p=p->next;
-        }
-
-        pre_min->next=p_min->next;
-        num=p_min->data;
-        cout << num << " ";
-        free(p_min);
-    }
-    cout << endl;
-}
-
-
-LinkList Delete_Min_Elem(LinkList L,ElemType &e)
-{
-    LNode *p=L->next,*pre=L;
-    LNode *p_min=L->next;//记录最小值的指针
-    LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
-
+    LNode *p=L->next,*r=L,*q;//r为尾指针
     while(p!=NULL)
     {
-        if(p->data<p_min->data)
+        if(p->data!=r->data)//判断当前结点的值是否和尾结点的值相等
         {
-            p_min=p;
-            pre_min=pre;
+            r->next=p;
+            r=p;
+
+            p=p->next;
         }
-        pre=p;
-        p=p->next;
+        else
+        {
+            q=p;//临时存储,以便释放
+            p=p->next;
+            free(q);
+        }
     }
-
-    pre_min->next=p_min->next;
-    e=p_min->data;
-    free(p_min);
-
-    return L;
+    r->next=NULL;
 }
-
-void Sort_And_Delete_short(LinkList &L)
-{
-    while(L->next!=NULL)
-    {
-        ElemType num;
-        Delete_Min_Elem(L, num);
-        cout << num << " ";
-    }
-    cout << endl;
-}
-
 
 void Test()
 {
     LinkList L;
     List_TailInsert(L);   
     /*
-        10 3 3 16 3 27 3 41 -1
-        
-        3 1 2 4 5 -1
+
+        7 10 10 21 30 42 42 42 51 70 -1
     */            
     PrintList(L);
-    
-    //Sort_And_Delete(L);
-    Sort_And_Delete_short(L);
 
-    //PrintList(L);           
+    DeleteSameElem(L);
+    
+    PrintList(L);
+    
     
     DestroyList(L);
 }

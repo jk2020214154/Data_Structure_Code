@@ -249,88 +249,52 @@ void DestroyList(LinkList &L)//释放单链表
     }
 }
 
-void Sort_And_Delete(LinkList &L)
+bool Judge_List(LinkList L1,LinkList L2)
 {
-    while(L->next!=NULL)
-    {
-        LNode *p=L->next,*pre=L;
-        LNode *p_min=L->next;//记录最小值的指针
-        LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
-        ElemType num;
+    LNode *p1=L1->next,*p2=L2->next;
 
-        while(p!=NULL)
+    while(p1!=NULL&&p2!=NULL)
+    {
+        if(p1->data==p2->data)//相等,两链表均后移
         {
-            if(p->data<p_min->data)
-            {
-                p_min=p;
-                pre_min=pre;
-            }
-            pre=p;
-            p=p->next;
+            p1=p1->next;
+            p2=p2->next;
         }
-
-        pre_min->next=p_min->next;
-        num=p_min->data;
-        cout << num << " ";
-        free(p_min);
-    }
-    cout << endl;
-}
-
-
-LinkList Delete_Min_Elem(LinkList L,ElemType &e)
-{
-    LNode *p=L->next,*pre=L;
-    LNode *p_min=L->next;//记录最小值的指针
-    LNode *pre_min=L;//记录最小值的前驱指针(方便后续更改)
-
-    while(p!=NULL)
-    {
-        if(p->data<p_min->data)
+        else//L1后移,L2重新匹配
         {
-            p_min=p;
-            pre_min=pre;
+            p1=p1->next;
+            p2=L2->next;
         }
-        pre=p;
-        p=p->next;
     }
 
-    pre_min->next=p_min->next;
-    e=p_min->data;
-    free(p_min);
-
-    return L;
+    if(p2==NULL)
+        return true;
+    else return false;
 }
-
-void Sort_And_Delete_short(LinkList &L)
-{
-    while(L->next!=NULL)
-    {
-        ElemType num;
-        Delete_Min_Elem(L, num);
-        cout << num << " ";
-    }
-    cout << endl;
-}
-
 
 void Test()
 {
-    LinkList L;
-    List_TailInsert(L);   
+    LinkList A,B;
+    List_TailInsert(A);
+    List_TailInsert(B);
     /*
-        10 3 3 16 3 27 3 41 -1
+        1 2 5 6 7 8 10 16 -1
         
-        3 1 2 4 5 -1
+        2 5 6 7 -1
+        3 4 8 -1
+        2 6 7 -1
     */            
-    PrintList(L);
+    PrintList(A);
+    PrintList(B);
     
-    //Sort_And_Delete(L);
-    Sort_And_Delete_short(L);
-
-    //PrintList(L);           
+    if(Judge_List(A, B)==true)
+        cout << "YES" << endl;
+    else cout << "NO" << endl;
     
-    DestroyList(L);
+    
+    cout << "-----" << endl;
+    DestroyList(A);
+    DestroyList(B);
 }
 
 
