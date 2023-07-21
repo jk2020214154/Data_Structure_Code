@@ -983,7 +983,7 @@ int Search_k(LinkList list,int k,ElemType &e)
 ```
 
 * **方法二**:设置两个指针 $p_1$和 $p_2$,让两者的距离始终为 $k$,当后面的指针到达尾部,此时前面的指针即为所求.
-* ![QQ图片20230721233122.png](https://cdn.acwing.com/media/article/image/2023/07/21/85276_ab675fda27-QQ图片20230721233122.png) 
+* ![](https://cdn.acwing.com/media/article/image/2023/07/21/85276_ab675fda27-QQ图片20230721233122.png) 
 ```cpp
 int Search_k(LinkList list,int k,ElemType &e)
 {
