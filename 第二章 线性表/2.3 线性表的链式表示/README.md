@@ -913,7 +913,7 @@ bool Judge_Loop(LinkList L)
     else return true;
 }
 ```
-![IMG_20230721_225720_edit_891521494116462.jpg](https://cdn.acwing.com/media/article/image/2023/07/21/85276_178a07a427-IMG_20230721_225720_edit_891521494116462.jpg) 
+![](https://cdn.acwing.com/media/article/image/2023/07/21/85276_178a07a427-IMG_20230721_225720_edit_891521494116462.jpg) 
 
 * 若要找到**环的入口**,代码如下:
 
@@ -1041,7 +1041,7 @@ int Search_k(LinkList list,int k,ElemType &e)
 声明两个节点指针 $p_1$、 $p_2$，计算出两个链表的长度，并计算它们的差，然后让节点指针指向长度较长的链表并使该指针后移，直到与另一个较短的链表等长，最后让两个指针同时后移，当两个指针指向同一个地址时，该地址即为所要寻找的两个链表共同后缀的起始位置。
 
 ```cpp
-
+LNode* Search_Common_Node(LinkList L1,LinkList L2)
 {
     int len1=Length(L1),len2=Length(L2);
     int delta=abs(len1-len2);//长度差值
@@ -1197,5 +1197,5 @@ void ChangeList(LinkList &L)
 }
 ```
 
-查找中间结点的时间复杂度为 $O(n)$,逆置的时间复杂度为 $O(n)$,将后半段插入前半段的时间复杂度为 $O(n)$,总的时间复杂度为 $O(n)$.
+查找中间结点的时间复杂度为 $O(n)$,逆置的时间复杂度为 $O(n)$,将后半段插入前半段的时间复杂度为 $O(n)$,故总的时间复杂度为 $O(n)$.
 
