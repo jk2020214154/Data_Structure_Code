@@ -28,7 +28,7 @@ $=2^kT(\frac{n}{2^k})+knC$
 
 > 分析以下各程序段，求出算法的时间复杂度.
 
-> ![](https://cdn.acwing.com/media/article/image/2023/07/25/85276_c28acd022a-20230725114858.jpg) 
+![20230725114858.jpg](https://cdn.acwing.com/media/article/image/2023/07/25/85276_5856cfb72a-20230725114858.jpg) 
 
 ```cpp
 i=1;k=0;
