@@ -2,6 +2,6 @@
 
 >  一个算法所需时间由下述递归方程表示，试求出该算法的时间复杂度的级别(或阶).
 >
-> $$ T(n)=\left\{ \begin{matrix} 1,n=1 \\ 2T(n/2)+n,n > 1  \end{matrix} \right. $$
+> ![](https://cdn.acwing.com/media/article/image/2023/07/25/85276_82e947a22a-20230725111450.png) 
 >
 > 式中， $n$是问题的规模，为简单起见，设 $n$是 $2$的整数次幂。
