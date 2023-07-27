@@ -72,6 +72,7 @@ bool GetHead(SqQueue Q,ElemType &x)//获取队头
 
 void DestroyQueue(SqQueue &Q)//销毁队列
 {
+    //由于是静态分配,不用释放
     ElemType num;
     while(QueueEmpty(Q)==false)
         DeQueue(Q, num);
