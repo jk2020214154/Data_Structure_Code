@@ -277,7 +277,10 @@ bool QueueEmpty(SqStack S1,SqStack S2)//判断队空
 
 下面是**队满**、**队未满(队未空)**、**队空**的图示:
 
-![](https://cdn.acwing.com/media/article/image/2023/07/28/85276_1991020e2c-20230728110107.png) 
+![](https://cdn.acwing.com/media/article/image/2023/07/28/85276_83e5716a2d-20230728154310.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/07/28/85276_86fec57d2d-20230728154325.png) 
+
 
 ![](https://cdn.acwing.com/media/article/image/2023/07/28/85276_62eea7c62c-20230728110334.png) 
 
