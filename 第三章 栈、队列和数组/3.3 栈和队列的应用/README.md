@@ -76,3 +76,51 @@ string trainArrange(string str,int len)
 > 
 >
 > ![](https://cdn.acwing.com/media/article/image/2023/07/29/85276_e58c32842d-20230729160458.png) 
+
+已知
+
+*  $P_0(x)=1$;
+*  $P_1(x)=2x$;
+*  $P_2(x)=2xP_1(x)-2\times 1 P_0(x)$;
+*  $P_3(x)=2xP_2(x)-2\times 2 P_1(x)$;
+*  $\cdots$;
+*  $P_{n-1}(x)=2xP_{n-2}(x)-2\times (n-2) P_{n-3}(x)$;
+*  $P_n(x)=2xP_{n-1}(x)-2\times (n-1) P_{n-2}(x)$.
+
+若要求出 $P_n(x)$,需求出 $P_{n-1}(x),P_{n-2}(x),\cdots ,P_1(x),P_0(x)$.
+
+设 $num0=P_0(x)$, $num1=P_1(x)$,此时 $P_2(x)=2x \times num1 - 2\times num0$;
+
+同理若想求出 $P_3(x)$,此时让 $num0=num1$, $num1=P_2(x)$.
+
+最终求出 $P_n(x)$后, $num1$为最终的答案.
+
+不用像书上那样存入`结构体`中,只用记录其对应的下标 $id$即可.
+
+```cpp
+int P(int n,int x)
+{
+    if(n==0)
+        return 1;
+    
+    SqStack S;
+    InitStack(S);
+
+    int num0=1,num1=2*x;
+
+    for(int i=n;i>=2;i--)//i为对应的下标id
+        Push(S,i);
+    
+    while(StackEmpty(S)==false)
+    {
+        int id;
+        Pop(S, id);
+        int val=2*x*num1-2*(id-1)*num0;
+        
+        num0=num1;
+        num1=val;
+    }
+    return num1;
+}
+```
+
