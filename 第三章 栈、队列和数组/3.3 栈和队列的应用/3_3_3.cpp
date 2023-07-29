@@ -54,6 +54,15 @@ void DestroyStack(SqStack &S)//销毁栈
     //由于是静态分配,不用释放
 }
 
+// int P(int n,int x)
+// {
+//     if(n==0)
+//         return 1;
+//     else if(n==1)
+//         return 2*x;
+//     else return 2*x*P(n-1,x)-2*(n-1)*P(n-2,x);
+// }
+
 int P(int n,int x)
 {
     if(n==0)

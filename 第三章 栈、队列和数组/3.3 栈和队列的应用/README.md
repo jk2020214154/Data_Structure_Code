@@ -77,6 +77,18 @@ string trainArrange(string str,int len)
 >
 > ![](https://cdn.acwing.com/media/article/image/2023/07/29/85276_e58c32842d-20230729160458.png) 
 
+```cpp
+//递归实现
+int P(int n,int x)
+{
+    if(n==0)
+        return 1;
+    else if(n==1)
+        return 2*x;
+    else return 2*x*P(n-1,x)-2*(n-1)*P(n-2,x);
+}
+```
+
 已知
 
 *  $P_0(x)=1$;
