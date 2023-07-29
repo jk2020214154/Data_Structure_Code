@@ -54,51 +54,40 @@ void DestroyStack(SqStack &S)//销毁栈
     //由于是静态分配,不用释放
 }
 
-
-bool bracketCheck(string str,int len)
+string trainArrange(string str,int len)
 {
     SqStack S;
     InitStack(S);
+    string res="";
 
     for(int i=0;i<len;i++)
     {
-        if(str[i]=='('||str[i]=='['||str[i]=='{')
-            Push(S,str[i]);
-        else
-        {
-            if(StackEmpty(S)==true)//栈空(右括号无匹配)
-                return false;
-            ElemType x;
-            Pop(S,x);
-
-            if(str[i]==')'&&x!='(')//左右括号不匹配
-                return false;
-            if(str[i]==']'&&x!='[')
-                return false;
-            if(str[i]=='}'&&x!='{')
-                return false;
-        }
+        if(str[i]=='S')//软座
+            res+='S';
+        else //硬座
+            Push(S, str[i]);
     }
-    return StackEmpty(S);//左括号不匹配
-}
 
+    while(StackEmpty(S)==false)//将剩余硬座接在软座之后
+    {
+        char seat;
+        Pop(S, seat);
+        res+=seat;
+    }
+    return res;
+}
 
 void Test()
 {
     string s;
     cin >> s;
-    /*
-        {(())[]}
-        {(()][]}
-        {(())}]()
-        {{(())[]}
+
+    /*H表示硬座,S表示软座
+        HSSHHSSSHH
     */
 
-    if(bracketCheck(s,s.size())==true)
-        cout << "匹配成功" << endl;
-    else cout << "匹配失败" << endl;
+    cout << trainArrange(s,s.size()) << endl;
 }
-
 
 int main()
 {
