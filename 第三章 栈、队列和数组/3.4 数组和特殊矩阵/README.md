@@ -54,3 +54,5 @@
 >  $i,j,value$分别代表非零元素所在的行号、列号和相应的元素值； $down$和 $right$分别称为向下指针和向右指针,分别用来链接同列中和同行中的下一个非零元素结点。
 >
 >  ![](https://cdn.acwing.com/media/article/image/2023/07/30/85276_a60435b42e-20230730122155.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/07/30/85276_af3ca5662e-20230730125756.png) 
