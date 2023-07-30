@@ -57,4 +57,4 @@ for(int i=0;i<n;i++)
 
 时间复杂度分别为 $O(n)$, $O(\sqrt{n})$, $O(n^3)$, $O(nm)$.
 
-![20230725114858.jpg](https://cdn.acwing.com/media/article/image/2023/07/25/85276_5856cfb72a-20230725114858.jpg) 
+![](https://cdn.acwing.com/media/article/image/2023/07/25/85276_5856cfb72a-20230725114858.jpg) 
