@@ -211,11 +211,11 @@
 >
 > D. $\color{Red}{SA+255}$
 
-二维数组 $A$(有 $9$行, $10$列),套公式 $LOC(a_{i,j})=LOC(a_{0,0})+(i \times m + j) \times L$,代入得$LOC(a_{8,5})=SA+(8\times 10+5)\times 3=SA+255$
+二维数组 $A$(有 $9$行, $10$列),套公式 $LOC(a_{i,j})=LOC(a_{0,0})+(i \times m + j) \times L$,代入得 $LOC(a_{8,5})=SA+(8\times 10+5)\times 3=SA+255$
 
 #### 3.4.5
 
->  将三对角矩阵$A[1,\cdots,100][1,\cdots,100]$按行优先存入一维数组 $B[1,\cdots,298]$中， $A$中元素 $A[66][65]$在数组 $B$中的位置 $k$为().
+>  将三对角矩阵$A[1, \cdots ,100][1, \cdots ,100]$按行优先存入一维数组 $B[1,\cdots,298]$中， $A$中元素 $A[66][65]$在数组 $B$中的位置 $k$为().
 >
 > A. $198$
 >
@@ -243,7 +243,7 @@
 
 ![](https://cdn.acwing.com/media/article/image/2023/07/30/85276_c7ef36122e-20230730163316.png)
 
-最终结果为 $pos=\frac{j(j-1)}{2}+i-1$,$k=pos+1=\frac{j(j-1)}{2}+i$
+最终结果为 $pos=\frac{j(j-1)}{2}+i-1$, $k=pos+1=\frac{j(j-1)}{2}+i$
 
 #### 3.4.7
 
@@ -261,7 +261,7 @@
 
 ![](https://cdn.acwing.com/media/article/image/2023/07/30/85276_c5635c962e-20230730162228.png)
 
-最终结果为 $pos=\frac{(2n-j+2)(j-1)}{2}+i-j$,$k=pos+1=\frac{(2n-j+2)(j-1)}{2}+i-j+1$
+最终结果为 $pos=\frac{(2n-j+2)(j-1)}{2}+i-j$, $k=pos+1=\frac{(2n-j+2)(j-1)}{2}+i-j+1$
 
 #### 3.4.8
 
@@ -321,7 +321,7 @@
 >
 > D. $306$
 
-由该公式$LOC(a_{i,j})=LOC(a_{0,0})+(i \times m + j) \times L$得:$LOC(a_{3,3})=220=100+(3\times m+3)\times 1$
+由该公式 $LOC(a_{i,j})=LOC(a_{0,0})+(i \times m + j) \times L$得: $LOC(a_{3,3})=220=100+(3\times m+3)\times 1$
 
 解得: $m=39$
 
