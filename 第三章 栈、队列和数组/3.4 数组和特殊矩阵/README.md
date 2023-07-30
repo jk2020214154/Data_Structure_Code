@@ -161,7 +161,7 @@
 
 ![](https://cdn.acwing.com/media/article/image/2023/07/30/85276_75e5dcba2e-20230730121758.png) 
 
-* **三元组(行标,列标,值)**——顺序存储
+* **三元组(行标,列标,值)** ——顺序存储
 
 ![](https://cdn.acwing.com/media/article/image/2023/07/30/85276_8c76e5552e-20230730122111.png) 
 
