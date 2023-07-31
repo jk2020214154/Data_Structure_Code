@@ -45,5 +45,10 @@ typedef struct Chunk{
     char ch[MaxBlockSize];
     Chunk *next;
 }Chunk;
+
+typedef struct{
+    Chunk *head,*rear;
+    int length;
+}LString;
 ```
 
