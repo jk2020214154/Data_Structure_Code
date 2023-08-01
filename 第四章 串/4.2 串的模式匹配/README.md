@@ -245,6 +245,9 @@ void get_next_val(SString Str,int nextval[])
 
 ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_03a6315130-20230801230747.png) 
 
-![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_0a70cf5b30-20230801231306.png) 2)
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_0a70cf5b30-20230801231306.png) 
+
+2)
 
 ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_166f3bc630-20230801232114.png) 
+
