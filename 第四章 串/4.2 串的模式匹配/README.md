@@ -151,7 +151,9 @@ void get_next_val(SString Str,int nextval[])
 
 * 求 $next$数组
 
-> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_16a6687030-20230801215514.png)  ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_a523a03930-20230801214901.png)
+> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_16a6687030-20230801215514.png)
+> 
+> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_a523a03930-20230801214901.png)
 >
 >  ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_29e3448830-20230801214919.png)
 >
