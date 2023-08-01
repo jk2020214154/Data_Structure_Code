@@ -238,3 +238,13 @@ void get_next_val(SString Str,int nextval[])
 > 1)求出 $P$的 $next$数组.
 >
 > 2)若 $S$作主串， $P$作模式串，试给出 $KMP$算法的匹配过程。
+
+1)
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_fef241cb30-20230801230812.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_03a6315130-20230801230747.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_0a70cf5b30-20230801231306.png) 2)
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_166f3bc630-20230801232114.png) 
