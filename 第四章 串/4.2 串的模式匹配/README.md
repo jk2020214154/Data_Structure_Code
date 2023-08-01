@@ -42,7 +42,7 @@ int StrIndex_KMP(SString Str1,SString Str2,int next[])//定位操作
 
 #### 计算next数组
 
-**手算**思想: $next[1]$填 $0$;$next[2]$填 $1$;其他的 $next$,在不匹配的位置前,划一根分界线,模式串一步一步往后退,直到分界线之前`能对上`,或模式串完全跨过分界线为止.此时 $j$指向哪, $next$数组值就是多少.
+**手算**思想: $next[1]$填 $0$; $next[2]$填 $1$;其他的 $next$,在不匹配的位置前,划一根分界线,模式串一步一步往后退,直到分界线之前`能对上`,或模式串完全跨过分界线为止.此时 $j$指向哪, $next$数组值就是多少.
 
 ```cpp
 //教材写法
@@ -62,7 +62,7 @@ void get_next(SString Str,int next[])
 
 #### 计算nextval数组
 
-**手算**思想: 先求 $next$数组,再由 $next$数组求 $nextval$数组
+**手算**思想: 先求 $next$数组,再由 $next$数组求 $nextval$数组.当 $s[next[j]]==s[j]$,则 $nextval[j]=nextval[next[j]]$;反之, $nextval[j]=next[j]$.
 
 ```cpp
 void get_next_val(SString Str,int next[],int nextval[])//可通过next数组直接求
@@ -147,9 +147,25 @@ void get_next_val(SString Str,int nextval[])
 >
 > D. $0,1,1,1,0,2,1,1,0,1,0,4$
 
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_cac4361130-20230801215137.png) 
 
+* 求 $next$数组
 
->  **教材做法**
+> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_16a6687030-20230801215514.png)  ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_a523a03930-20230801214901.png)
+>
+>  ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_29e3448830-20230801214919.png)
+>
+>  ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_332e348030-20230801215002.png)
+>
+> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_3dbb38c530-20230801215038.png)  
+>
+> 当求**位序**的 $next$数组,过程如上;当求**下标**的 $next$数组,无非在位序的 $next$数组基础上每个数 $-1$即可.
+
+* 求 $nextval$数组
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_53ca442930-20230801215054.png) 
+
+>  **教材做法**(忽略水印)
 >
 > ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_d20f07ea30-20230801195014.png) 
 >
