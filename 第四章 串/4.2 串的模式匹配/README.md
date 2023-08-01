@@ -151,9 +151,9 @@ void get_next_val(SString Str,int nextval[])
 
 * 求 $next$数组
 
-> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_16a6687030-20230801215514.png)
+> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_6137d44330-20230801215514.png) 
 > 
-> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_a523a03930-20230801214901.png)
+> ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_7af1bc5030-20230801222647.png) 
 >
 >  ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_29e3448830-20230801214919.png)
 >
@@ -174,3 +174,42 @@ void get_next_val(SString Str,int nextval[])
 > - - -
 >
 > ![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_e3a0649030-20230801195133.png) 
+
+
+
+>  **2015统考真题**：已知字符串 $S$为 $' abaabaabacacaabaabcc'$，模式串 $t$为 $'abaabc'$.采用 $KMP$算法进行匹配，第一次出现“失配”( $s[i] \neq s[j]$)时， $i=j=5$，则下次开始匹配时， $i$和 $j$的值分别是().
+>
+> A. $i=1,j=0$
+>
+> B. $i=5,j=0$
+>
+> C. $\color{Red}{i=5,j=2}$
+>
+> D. $i=6,j=2$
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_96949dc230-20230801222548.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_ab144eea30-20230801222608.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_b8885d6d30-20230801222731.png) 
+
+注意题目中 $i=j=5$时失配,可发现是下标法(对应编号是 $6$),由表知 $i$不变, $j$变成对应的 $next$数组值,故 $i=5$, $j=2$
+
+>  **2019统考真题**：设主串 $T='abaabaabcabaabc'$，模式串 $s = 'abaabc'$，采用 $KMP$算法进行模式匹配，到匹配成功时为止，在匹配过程中进行的单个字符间的比较次数是().
+>
+> A. $9$
+>
+> B. $\color{Red}{10}$
+>
+> C. $12$
+>
+> D. $15$
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_96949dc230-20230801222548.png)
+
+模式串同上题的一样.
+
+![](https://cdn.acwing.com/media/article/image/2023/08/01/85276_592ab7d030-20230801224007.png) 
+
+下划线处表示比较的次数,共 $6+4=10$次.
+
