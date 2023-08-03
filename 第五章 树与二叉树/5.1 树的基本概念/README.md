@@ -112,7 +112,7 @@
 
 * 具有 $n$个结点的 $m$叉树(或度为 $m$的树)的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$;
 
-由上知,$\left \lceil \log _3 (n\times 2+1) \right \rceil$
+由上知, $\left \lceil \log _3 (n\times 2+1) \right \rceil$
 
 ![](https://cdn.acwing.com/media/article/image/2023/08/03/85276_26e2f37931-20230803145032.png) 
 
