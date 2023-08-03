@@ -59,7 +59,7 @@
 >
 > D.至少有 $h+4$个结点
 
-套结论
+**套结论**
 
 * 高度为 $h$的 $m$**叉树**(或度为 $m$的树)至多有 $\frac{m^h-1}{m-1}$个结点;
 * 高度为 $h$的 $m$**叉树**至少有 $h$个结点,高度为 $h$的 度为 $m$的树至少有 $h+m-1$个结点;
@@ -78,9 +78,9 @@
 
 **方法一**:套结论
 
-具有 $n$个结点的 $m$叉树(或度为 $m$的树)的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$;
+* 具有 $n$个结点的 $m$叉树(或度为 $m$的树)的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$;
 
-$\left \lceil \log _3 (50\times 2+1) \right \rceil=\left \lceil \log _3 101 \right \rceil=5$
+由上知,$\left \lceil \log _3 (50\times 2+1) \right \rceil=\left \lceil \log _3 101 \right \rceil=5$
 
 **方法二**:计算每层的个数,求和与结点数比较
 
@@ -95,3 +95,29 @@ $\left \lceil \log _3 (50\times 2+1) \right \rceil=\left \lceil \log _3 101 \rig
 > C.  $113$
 >
 > D. $122$
+
+套结论
+
+* 树中的结点数等于所有节点的度数之和加 $1$;
+
+设度为 $0$的结点(叶子结点)有 $x$个,由题知:总结点数可表示为: $x\times 0+10\times 1+ 1\times 2+10\times 3+20\times 4+1$(度数之和加 $1$);总结点数亦可表示为 $x+10+1+10+20$(结点个数和)
+
+两式联立解得: $x=82$
+
+#### 5.1.1
+
+>  含有 $n$个结点的三叉树的最小高度是多少?
+
+**套结论**
+
+* 具有 $n$个结点的 $m$叉树(或度为 $m$的树)的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$;
+
+由上知,$\left \lceil \log _3 (n\times 2+1) \right \rceil$
+
+![](https://cdn.acwing.com/media/article/image/2023/08/03/85276_26e2f37931-20230803145032.png) 
+
+#### 5.1.2
+
+>  已知一棵度为 $4$的树中，度为 $0,1,2,3$的结点数分别为 $14,4,3,2$,求该树的结点总数 $n$和度为 $4$的结点个数，并给出推导过程。
+
+设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数为 $\displaystyle \sum_{i=1}^{m} a_i$
