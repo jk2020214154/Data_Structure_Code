@@ -80,7 +80,7 @@
 
 * 具有 $n$个结点的 $m$叉树(或度为 $m$的树)的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$;
 
-由上知,$\left \lceil \log _3 (50\times 2+1) \right \rceil=\left \lceil \log _3 101 \right \rceil=5$
+由上知, $\left \lceil \log _3 (50\times 2+1) \right \rceil=\left \lceil \log _3 101 \right \rceil=5$
 
 **方法二**:计算每层的个数,求和与结点数比较
 
