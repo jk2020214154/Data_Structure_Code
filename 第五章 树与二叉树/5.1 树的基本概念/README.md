@@ -35,7 +35,7 @@
 >
 > 故 $h_{min}=\left \lceil \log _m (n\times (m-1)+1) \right \rceil$
 
-* 设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数 $n$为 $\color{Red}{\displaystyle \sum_{i=0}^{m} a_i}$（表示结点个数之和),亦可表示为$\color{Red}{\displaystyle (\sum_{i=0}^{m} i\times a_i)+1}$(表示所有结点的度数之和)
+* 设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数 $n$为 $\color{Red}{\displaystyle \sum_{i=0}^{m} a_i}$（表示结点个数之和),亦可表示为$ \color{Red}{\displaystyle (\sum_{i=0}^{m} i\times a_i)+1}$(表示所有结点的度数之和)
 
 >  对于一棵具有 $n$个结点、度为 $4$的树来说，( $\color{Red}{A}$)
 >
@@ -120,7 +120,7 @@
 
 >  已知一棵度为 $4$的树中，度为 $0,1,2,3$的结点数分别为 $14,4,3,2$,求该树的结点总数 $n$和度为 $4$的结点个数，并给出推导过程。
 
-设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数 $n$为 $\color{Red}{\displaystyle \sum_{i=0}^{m} a_i}$（表示结点个数之和),亦可表示为$\color{Red}{\displaystyle (\sum_{i=0}^{m} i\times a_i)+1}$(表示所有结点的度数之和)
+设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数 $n$为 $\color{Red}{\displaystyle \sum_{i=0}^{m} a_i}$（表示结点个数之和),亦可表示为 $\color{Red}{\displaystyle (\sum_{i=0}^{m} i\times a_i)+1}$(表示所有结点的度数之和)
 
 设度为 $4$的结点个数是 $a_4$,由题知, $n=14+4+3+2+a_4=1\times 4+2\times 3 + 3\times 2+4\times a_4+1 $
 
