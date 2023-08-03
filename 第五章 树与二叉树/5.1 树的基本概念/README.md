@@ -35,7 +35,7 @@
 >
 > 故 $h_{min}=\left \lceil \log _m (n\times (m-1)+1) \right \rceil$
 
-
+* 设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数 $n$为 $\color{Red}{\displaystyle \sum_{i=0}^{m} a_i}$（表示结点个数之和),亦可表示为$\color{Red}{\displaystyle (\sum_{i=0}^{m} i\times a_i)+1}$(表示所有结点的度数之和)
 
 >  对于一棵具有 $n$个结点、度为 $4$的树来说，( $\color{Red}{A}$)
 >
@@ -120,4 +120,24 @@
 
 >  已知一棵度为 $4$的树中，度为 $0,1,2,3$的结点数分别为 $14,4,3,2$,求该树的结点总数 $n$和度为 $4$的结点个数，并给出推导过程。
 
-设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数为 $\displaystyle \sum_{i=1}^{m} a_i$
+设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数 $n$为 $\color{Red}{\displaystyle \sum_{i=0}^{m} a_i}$（表示结点个数之和),亦可表示为$\color{Red}{\displaystyle (\sum_{i=0}^{m} i\times a_i)+1}$(表示所有结点的度数之和)
+
+设度为 $4$的结点个数是 $a_4$,由题知, $n=14+4+3+2+a_4=1\times 4+2\times 3 + 3\times 2+4\times a_4+1 $
+
+解得: $a_4=2$, $n=25$
+
+#### 5.1.3
+
+>  已知一棵度为 $m$的树中，有 $n_1$个度为 $1$的结点，有 $n_2$个度为 $2$的结点  $\cdots\cdots$有 $n_m$个度为 $m$的结点，问该树有多少个叶子结点?
+
+设度为 $0$的结点(叶子结点)有 $n_0$个,设总结点个数为 $n$,
+
+ $n=\displaystyle \sum_{i=0}^{m} n_i=n_0+n_1+n_2+\cdots +n_m$
+
+ $n=\displaystyle (\sum_{i=0}^{m} i\times n_i )+1=n_0\times 0+n_1\times 1+n_2\times 2+\cdots +n_m\times m +1$
+
+故 $n_0=n_1+2n_2+\cdots+mn_m +1-(n_1+n_2+\cdots+n_m)$
+
+$=n_2+2n_3+3n_4+\cdots+(m-1)n_m+1$
+
+$\displaystyle =[\sum_{i=2}^{m} n_i\times (i-1)] +1$
