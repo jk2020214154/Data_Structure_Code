@@ -181,7 +181,7 @@ typedef struct BiTNode{
 >
 > D. $2m$个度为 $2$
 
-**核心公式**: $\color{Red}{n_0+n_1+n_2=n}$( $n$为总结点数),$\color{Red}{n_0=n_2+1}$
+**核心公式**: $\color{Red}{n_0+n_1+n_2=n}$( $n$为总结点数), $\color{Red}{n_0=n_2+1}$
 
 二叉树有 $2n$(偶数)个结点,故 $n_1=1$(奇数);
 
@@ -277,7 +277,7 @@ typedef struct BiTNode{
 >
 > D. $\color{Red}{501}$
 
-**核心公式**: $\color{Red}{n_0+n_1+n_2=n}$( $n$为总结点数),$\color{Red}{n_0=n_2+1}$
+**核心公式**: $\color{Red}{n_0+n_1+n_2=n}$( $n$为总结点数), $\color{Red}{n_0=n_2+1}$
 
 有题知,完全二叉树上有 $1001$(**奇数**)个结点,故 $n_1=0$;
 
