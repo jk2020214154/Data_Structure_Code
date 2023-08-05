@@ -81,7 +81,7 @@ typedef struct BiTNode{
 
 #### 二叉树的性质
 
-* 非空二叉树的叶结点数等于度为 $2$的结点数加 $1$,即 $n_0=n_2+1$.
+* 非空二叉树的叶结点数等于度为 $2$的结点数加 $1$,即 $\color{Green}{n_0=n_2+1}$.
 
 > 设树中度为 $i$( $i=0,1,2,\cdots,m$)的结点数为 $a_i$,总结点个数 $n$为 $\color{Red}{\displaystyle \sum_{i=0}^{m} a_i}$（表示结点个数之和),亦可表示为 $\color{Red}{\displaystyle (\sum_{i=0}^{m} i\times a_i)+1}$(表示所有结点的度数之和 $+1$) 
 >
