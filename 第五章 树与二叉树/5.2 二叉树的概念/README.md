@@ -97,3 +97,20 @@ typedef struct BiTNode{
 >
 > 整理得: $n_0=n_2+1$
 
+*  $m$叉树第 $i$层有 $m^{i-1}$个结点( $i \geq 1$),故二叉树第 $i$层有 $2^{i-1}$个结点( $i \geq 1$).
+* 高度为 $h$的 $m$**叉树**至多有 $\frac{m^h-1}{m-1}$个结点,高度为 $h$的二叉树至多有 $2^h-1$个结点(满二叉树).
+* 具有 $n$个( $n > 0$)结点的**完全二叉树**的高度 $h$为 $\left \lceil \log _2 (n+1) \right \rceil$或 $\left \lfloor \log _2 (n) \right \rfloor +1$
+
+> **证明**:
+>
+> 具有 $n$个结点的 $m$叉树的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$,故具有 $n$个结点的完全二叉树的高度为 $\left \lceil \log  _ 2 (n\times (2-1)+1)\right \rceil$即 $$\left \lceil \log _2 (n+1) \right \rceil$$.
+>
+> 高为 $h-1$的满二叉树共有 $2^{h-1}-1$个结点,高为 $h$的完全二叉树至少 $2^{h-1}$个结点,至多 $2^h-1$;
+>
+> 故 $2^{h-1} \leq n < 2^h$
+>
+> 两边同时取 $\log _2$,得: $h-1 \le \log _2 n < h$
+>
+> 故: $h=\left \lfloor \log _2 n \right \rfloor +1$
+>
+> **注**:具有 $n$个结点的**二叉树**的高度 $h$ 范围为 $\left \lceil \log _2 (n+1) \right \rceil \leq h \leq n$
