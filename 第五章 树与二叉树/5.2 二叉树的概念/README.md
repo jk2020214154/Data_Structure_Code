@@ -103,7 +103,7 @@ typedef struct BiTNode{
 
 > **证明**:
 >
-> 具有 $n$个结点的 $m$叉树的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$,故具有 $n$个结点的完全二叉树的高度为 $\left \lceil \log  _ 2 (n\times (2-1)+1)\right \rceil$即 $$\left \lceil \log _2 (n+1) \right \rceil$$.
+> 具有 $n$个结点的 $m$叉树的最小高度为 $\left \lceil \log  _ m (n\times (m-1)+1)\right \rceil$,故具有 $n$个结点的完全二叉树的高度为 $\left \lceil \log  _ 2 (n\times (2-1)+1)\right \rceil$即 $\left \lceil \log _2 (n+1) \right \rceil$.
 >
 > 高为 $h-1$的满二叉树共有 $2^{h-1}-1$个结点,高为 $h$的完全二叉树至少 $2^{h-1}$个结点,至多 $2^h-1$;
 >
