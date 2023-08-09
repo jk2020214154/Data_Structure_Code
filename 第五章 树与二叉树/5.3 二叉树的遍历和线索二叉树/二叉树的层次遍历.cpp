@@ -63,38 +63,6 @@ void visit(BiTNode * p)//访问当前结点的数据
     cout << p->value << " ";
 }
 
-void PreOrder(BiTree T)//前序遍历
-{
-    if(T!=NULL)
-    {
-        visit(T);//访问根节点
-        PreOrder(T->lchild);//递归遍历左子树
-        PreOrder(T->rchild);//递归遍历右子树
-    }
-}
-
-
-void InOrder(BiTree T)//中序遍历
-{
-    if(T!=NULL)
-    {
-        InOrder(T->lchild);//递归遍历左子树
-        visit(T);//访问根节点
-        InOrder(T->rchild);//递归遍历右子树
-    }
-}
-
-
-void PostOrder(BiTree T)//后序遍历
-{
-    if(T!=NULL)
-    {
-        PostOrder(T->lchild);//递归遍历左子树
-        PostOrder(T->rchild);//递归遍历右子树
-        visit(T);//访问根结点
-    }
-}
-
 void LevelOrder(BiTree T)//层次遍历
 {
     queue<BiTNode *> q;//此处为了方便使用c++中的stl
@@ -114,19 +82,6 @@ void LevelOrder(BiTree T)//层次遍历
     }
 }
 
-int treeDepth(BiTree T)
-{
-    if(T==NULL)
-        return 0;
-    else
-    {
-        int l=treeDepth(T->lchild);
-        int r=treeDepth(T->rchild);
-        return l>r?l+1:r+1;
-    }
-}
-
-
 
 void Test()
 {
@@ -139,20 +94,9 @@ void Test()
     InsertLeftTreeNode(T->rchild, 6);
     InsertRightTreeNode(T->rchild, 7);
 
-    cout << "前序遍历结果:";
-    PreOrder(T);
 
-    cout << endl << "中序遍历结果:";
-    InOrder(T);
-
-    cout << endl << "后序遍历结果:";
-    PostOrder(T);
-
-    cout << endl << "层次遍历结果:";
+    cout << "层次遍历结果:";
     LevelOrder(T);
-
-    cout << endl << "二叉树的深度:" << treeDepth(T) << endl;
-
 
     ReleaseTree(T);
 }
