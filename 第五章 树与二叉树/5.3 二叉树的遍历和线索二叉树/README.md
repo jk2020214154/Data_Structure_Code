@@ -240,3 +240,265 @@ void PostOrder_Non_Recursive2(BiTree T)//后序遍历非递归
 
 #### 二叉树的层序遍历
 
+```cpp
+void LevelOrder(BiTree T)//层次遍历
+{
+    queue<BiTNode *> q;//此处为了方便使用c++中的stl
+
+    q.push(T);//将根结点入队
+
+    while(q.empty()==0)
+    {
+        BiTNode *p=q.front();//队头结点出队
+        q.pop();
+        visit(p);//访问队头元素
+
+        if(p->lchild!=NULL)//左子树不空,将左子树根结点入队
+            q.push(p->lchild);
+        if(p->rchild!=NULL)//右子树不空,将右子树根结点入队
+            q.push(p->rchild);
+    }
+}
+```
+
+#### 由遍历序列构造二叉树
+
+* 由二叉树的`先序序列`和**中序序列**可以唯一确定一棵二叉树.
+* 由二叉树的`后序序列`和**中序序列**可以唯一确定一棵二叉树.
+* 由二叉树的`层序序列`和**中序序列**可以唯一确定一棵二叉树.
+
+前序、后序、层序序列的两两组合**无法唯一确定**一棵二叉树
+
+#### 线索二叉树
+
+核心
+
+```cpp
+ThreadNode *pre=NULL;//指向当前访问结点的前驱
+
+void visit(ThreadNode *q)//访问当前结点的数据
+{
+    if(q->lchild==NULL)//左子树为空建立前驱线索
+    {
+        q->lchild=pre;
+        q->ltag=1;
+    }
+    if(pre!=NULL&&pre->rchild==NULL)//建立前驱结点的后继结点
+    {
+        pre->rchild=q;
+        pre->rtag=1;
+    }
+    pre=q;
+}
+```
+
+* 前序线索化
+
+```cpp
+void PreThread(ThreadTree T)//前序线索化
+{
+    if(T!=NULL)
+    {
+        visit(T);//访问根节点
+        if(T->ltag==0)
+            PreThread(T->lchild);//递归遍历左子树
+        if(T->rtag==0) //注意王道此处未加,实际应加上
+            PreThread(T->rchild);//递归遍历右子树
+    }
+}
+
+void CreatePreThread(ThreadTree T)
+{
+    pre=NULL;//pre初始为NULL
+    if(T!=NULL)//非空二叉树才能线索化
+    {
+        PreThread(T);//前序线索化二叉树
+        if(pre->rchild==NULL)//处理遍历的最后一个结点(此处if可省略)
+            pre->rtag=1;
+    }
+}
+```
+
+* 中序线索化
+
+```cpp
+void InThread(ThreadTree T)//中序线索化
+{
+    if(T!=NULL)
+    {
+        InThread(T->lchild);//递归遍历左子树
+        visit(T);//访问根节点
+        InThread(T->rchild);//递归遍历右子树
+    }
+}
+
+void CreateInThread(ThreadTree T)
+{
+    pre=NULL;//pre初始为NULL
+    if(T!=NULL)//非空二叉树才能线索化
+    {
+        InThread(T);//中序线索化二叉树
+        if(pre->rchild==NULL)//处理遍历的最后一个结点(此处if可省略)
+            pre->rtag=1;
+    }
+}
+```
+
+* 后序线索化
+
+```cpp
+void PostThread(ThreadTree T)//后序线索化
+{
+    if(T!=NULL)
+    {
+        PostThread(T->lchild);//递归遍历左子树
+        PostThread(T->rchild);//递归遍历右子树
+        visit(T);//访问根节点
+    }
+}
+
+void CreatePostThread(ThreadTree T)
+{
+    pre=NULL;//pre初始为NULL
+    if(T!=NULL)//非空二叉树才能线索化
+    {
+        PostThread(T);//后序线索化二叉树
+        if(pre->rchild==NULL)//处理遍历的最后一个结点(此处if可省略)
+            pre->rtag=1;
+    }
+}
+```
+
+#### 在线索二叉树中找前驱后继
+
+* 中序线索二叉树找**中序后继**并实现中序遍历
+
+```cpp
+//找到以p为根的子树中,第一个被中序遍历的结点
+ThreadNode* Firstnode(ThreadNode *p)
+{
+    //循环找到最左下结点(不一定是叶节点)
+    while(p->ltag==0)
+        p=p->lchild;
+    return p;
+}
+
+//在中序线索二叉树中找到结点p的后继结点
+ThreadNode* Nextnode(ThreadNode *p)
+{
+    if(p->rtag==0)//右子树中最左下结点
+        return Firstnode(p->rchild);
+    else return p->rchild;//rtag==1直接返回后继线索
+}
+
+
+void Inorder(ThreadNode* T)//利用线索二叉树实现中序遍历
+{
+    for(ThreadNode *p=Firstnode(T);p!=NULL;p=Nextnode(p))
+        cout << p->value << " ";
+}
+```
+
+* 中序线索二叉树找**中序前驱**并实现逆向中序遍历
+
+```cpp
+//找到以p为根的子树中,最后一个被中序遍历的结点
+ThreadNode* Lastnode(ThreadNode *p)
+{
+    //循环找到最右下结点(不一定是叶节点)
+    while(p->rtag==0)
+        p=p->rchild;
+    return p;
+}
+
+//在中序线索二叉树中找到结点p的前驱结点
+ThreadNode* Prenode(ThreadNode *p)
+{
+    if(p->ltag==0)//左子树中最右下结点
+        return Lastnode(p->lchild);
+    else return p->lchild;//ltag==1直接返回前驱线索
+}
+
+void RevInorder(ThreadNode* T)//利用线索二叉树实现逆向中序遍历
+{
+    for(ThreadNode *p=Lastnode(T);p!=NULL;p=Prenode(p))
+        cout << p->value << " ";
+}
+```
+
+* 先序线索二叉树找先序后驱
+
+```cpp
+//在先序线索二叉树中找到结点p的后继结点
+ThreadNode* Nextnode(ThreadNode *p)
+{
+    if(p->rtag==0)
+    {
+        if(p->lchild!=NULL&&p->ltag==0)
+            return p->lchild;
+        else if(p->rchild!=NULL&&p->rtag==0)
+            return p->rchild;
+        else return NULL;
+    }
+    else return p->rchild;//rtag==1直接返回后继线索
+}
+
+
+void Preorder(ThreadNode* T)//利用线索二叉树实现先序遍历
+{
+    for(ThreadNode *p=T;p!=NULL;p=Nextnode(p))
+        cout << p->value << " ";
+}
+```
+
+* 先序线索二叉树找先序前驱(**无法实现**,`无指向父结点的指针`的条件下,由于左右子树中的结点只能是根的后继,不可能是前驱)
+
+基于**三叉链表**可实现先序前驱的查找
+
+> 1.如果能找到 $p$的父结点,且 $p$是左孩子,此时 $p$的父结点是 $p$的前驱;
+>
+> 2.如果能找到 $p$的父结点,且 $p$是右孩子,其左兄弟为空,此时 $p$的父结点是 $p$的前驱;
+>
+> 3.如果能找到 $p$的父结点,且 $p$是右孩子,其左兄弟非空,此时 $p$的前驱为**左兄弟子树中最后一个被先序遍历的结点**;
+>
+> 4.如果 $p$是根结点,则 $p$无先序前驱.
+
+* 后序线索二叉树找后序前驱
+
+```cpp
+//在后序线索二叉树中找到结点p的后继结点
+ThreadNode* Prenode(ThreadNode *p)
+{
+    if(p->ltag==0)
+    {
+        if(p->rchild!=NULL&&p->rtag==0)
+            return p->rchild;
+        else if(p->lchild!=NULL&&p->ltag==0)
+            return p->lchild;
+        else return NULL;
+    }
+    else return p->lchild;//ltag==1直接返回前驱线索
+}
+
+void RevInorder(ThreadNode* T)//利用线索二叉树实现逆向后序遍历
+{
+    for(ThreadNode *p=T;p!=NULL;p=Prenode(p))
+        cout << p->value << " ";
+}
+```
+
+* 后序线索二叉树找后序后继(**无法实现**,`无指向父结点的指针`的条件下,左右子树中的结点只可能是根的前驱,不可能是后继)
+
+基于**三叉链表**可实现后序后驱的查找
+
+>  1.如果能找到 $p$的父结点,且 $p$是右孩子,此时 $p$的父结点是 $p$的后继;
+>
+> 2.如果能找到 $p$的父结点,且 $p$是左孩子,其右兄弟为空,此时 $p$的父结点是 $p$的后继;
+>
+> 3.如果能找到 $p$的父结点,且 $p$是左孩子,其右兄弟非空,此时 $p$的前驱为**右兄弟子树中第一个被后序遍历的结点**;
+>
+> 4.如果 $p$是根结点,则 $p$无后序后继.
+
+![](https://cdn.acwing.com/media/article/image/2023/08/10/85276_9cc495f437-20230810225250.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/08/10/85276_bf2f95ad37-20230810225351.png) 
