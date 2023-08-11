@@ -373,6 +373,10 @@ void CreatePostThread(ThreadTree T)
 
 * 中序线索二叉树找**中序后继**并实现中序遍历
 
+>  1.若 $p\to rtag=1$,则 $next=p \to rchild$(有后继线索);
+>
+> 2.若 $p \to rtag=0$,则 $next=p$的**右子树中最左下结点**.
+
 ```cpp
 //找到以p为根的子树中,第一个被中序遍历的结点
 ThreadNode* Firstnode(ThreadNode *p)
@@ -401,6 +405,10 @@ void Inorder(ThreadNode* T)//利用线索二叉树实现中序遍历
 
 * 中序线索二叉树找**中序前驱**并实现逆向中序遍历
 
+>  1.若 $p\to ltag=1$,则 $pre=p \to lchild$(有前驱线索);
+>
+> 2.若 $p \to ltag=0$,则 $pre=p$的**左子树中最右下结点**.
+
 ```cpp
 //找到以p为根的子树中,最后一个被中序遍历的结点
 ThreadNode* Lastnode(ThreadNode *p)
@@ -426,7 +434,13 @@ void RevInorder(ThreadNode* T)//利用线索二叉树实现逆向中序遍历
 }
 ```
 
-* 先序线索二叉树找先序后驱
+* 先序线索二叉树找先序后继
+
+>  1.若 $p \to rtag=1$,则 $next=p \to rchild$(有后继线索);
+>
+> 2.若 $p \to rtag=0$,则:
+>
+> 当 $p$有左孩子,则先序后继为**左孩子**;当 $p$没有左孩子,则先序后继为**右孩子**.
 
 ```cpp
 //在先序线索二叉树中找到结点p的后继结点
@@ -465,6 +479,12 @@ void Preorder(ThreadNode* T)//利用线索二叉树实现先序遍历
 
 * 后序线索二叉树找后序前驱
 
+>  1.若 $p \to ltag=1$,则 $pre=p \to lchild$;
+>
+> 2.若 $p \to ltag=0$,则:
+>
+> 当 $p$有右孩子,则后序前驱为右孩子;当 $p$没有右孩子,则后序前驱为左孩子.
+
 ```cpp
 //在后序线索二叉树中找到结点p的后继结点
 ThreadNode* Prenode(ThreadNode *p)
@@ -489,7 +509,7 @@ void RevInorder(ThreadNode* T)//利用线索二叉树实现逆向后序遍历
 
 * 后序线索二叉树找后序后继(**无法实现**,`无指向父结点的指针`的条件下,左右子树中的结点只可能是根的前驱,不可能是后继)
 
-基于**三叉链表**可实现后序后驱的查找
+基于**三叉链表**可实现后序后继的查找
 
 >  1.如果能找到 $p$的父结点,且 $p$是右孩子,此时 $p$的父结点是 $p$的后继;
 >
