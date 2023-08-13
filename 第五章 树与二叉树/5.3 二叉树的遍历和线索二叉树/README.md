@@ -781,3 +781,242 @@ void RevInorder(ThreadNode* T)//利用线索二叉树实现逆向后序遍历
 > * **相同**
 > 
 > ![](https://cdn.acwing.com/media/article/image/2023/08/13/85276_84b0330f39-20230813193517.png)
+
+#### 5.3.3
+
+>  编写后序遍历二叉树的非递归算法。
+
+后序遍历的非递归实现是三种遍历方式中最难的一种。因为在后序遍历中，要保证左孩子和右孩子都已被访问并且左孩子在右孩子前访问才能访问根结点。
+
+**第一种思路**：对于任一结点 $P$，将其入栈，然后沿其左子树一直往下搜索，直到搜索到没有左孩子的结点，此时该结点出现在栈顶，但是此时不能将其出栈并访问， 因此其右孩子还未被访问。所以接下来按照相同的规则对其右子树进行相同的处理，当访问完其右孩子时，该结点又出现在栈顶，此时可以将其出栈并访问。这样就保证了正确的访问顺序。可以看出，在这个过程中，每个结点都两次出现在栈顶，只有在第二次出现在栈顶时，才能访问它。因此需要多**设置一个变量标识该结点是否是第一次出现在栈顶**。
+
+```cpp
+typedef struct StackNode{
+    BiTNode *bitnode;
+    bool isFirst;
+}StackNode;
+
+void PostOrder_Non_Recursive1(BiTree T)//后序遍历非递归
+{
+    stack<StackNode* > s;//此处为了方便使用c++中的stl
+
+    BiTNode *p=T;
+
+    while(p!=NULL||s.empty()==0)//p不空或栈不空
+    {
+        if(p!=NULL)//一路向左
+        {
+            StackNode *new_node=(StackNode *)malloc(sizeof(StackNode));
+            new_node->bitnode=p;
+            new_node->isFirst=true;//标记第一次访问
+            
+            //s.push(p);//当前结点入栈
+            s.push(new_node);
+
+            p=p->lchild;//左孩子不空,一直向左走
+        }
+        else//出栈,并转向出栈结点的右子树
+        {
+            StackNode *temp_node=s.top();//获取栈顶
+            s.pop();//栈顶元素出栈
+
+            if(temp_node->isFirst==true)//表示是第一次出现在栈顶(从左子树返回)
+            {
+                temp_node->isFirst=false;
+                s.push(temp_node);
+                p=temp_node->bitnode->rchild;//向右子树走,p赋值为当前出栈元素的右孩子
+            }
+            else//第二次出现在栈顶 
+            {
+                visit(temp_node->bitnode);// ***访问当前结点***
+                p=NULL;//结点访问完后,重置p指针
+            }
+        }
+    }
+}
+```
+
+**第二种思路**：要保证根结点在左孩子和右孩子访问之后才能访问，因此对于任一结点 $P$，先将其入栈。如果 $P$不存在左孩子和右孩子，则可以直接访问它；或者 $P$存在左孩子或者右孩子，但是其左孩子和右孩子都已被访问过了，则同样可以直接访问该结点。若非上述两种情况，则将 $P$的右孩子和左孩子依次入栈，这样就保证了每次取栈顶元素的时候，左孩子在右孩子前面被访问，左孩子和右孩子都在根结点前面被访问。用**辅助指针**记录最近访问过的结点。
+
+```cpp
+void PostOrder_Non_Recursive2(BiTree T)//后序遍历非递归
+{
+    stack<BiTNode* > s;//此处为了方便使用c++中的stl
+
+    BiTNode *p=T;
+    BiTNode *pre=NULL;
+
+    while(p!=NULL||s.empty()==0)//p不空或栈不空
+    {
+        if(p!=NULL)//一路向左
+        {
+            s.push(p);//当前结点入栈
+            p=p->lchild;//左孩子不空,一直向左走
+        }
+        else//向右
+        {
+            p=s.top();//获取栈顶
+            if(p->rchild!=NULL&&p->rchild!=pre)//若右子树存在,且未被访问
+                p=p->rchild;//转向右
+            else//否则,弹出结点并访问
+            {
+                s.pop();
+                visit(p);// ***访问当前结点***
+                pre=p;
+                p=NULL;//结点访问完,重置p指针
+            }
+        }
+    }
+}
+```
+
+#### 5.3.4
+
+>  试给出二叉树的自下而上、从右到左的层次遍历算法。
+
+用正常的**层次遍历算法**，唯一区别就是变为逆向输出，很容易联想到**栈**，可以将输出语句改为压栈语句，等层次遍历完之后再输出栈元素，即为结果。
+
+```cpp
+void visit(BiTNode * p)//访问当前结点的数据
+{
+    cout << p->value << " ";
+}
+
+void LevelOrder(BiTree T)//层次遍历
+{
+    queue<BiTNode *> q;//此处为了方便使用c++中的stl
+
+    q.push(T);//将根结点入队
+
+    while(q.empty()==0)
+    {
+        BiTNode *p=q.front();//队头结点出队
+        q.pop();
+        visit(p);//访问队头元素
+
+        if(p->lchild!=NULL)//左子树不空,将左子树根结点入队
+            q.push(p->lchild);
+        if(p->rchild!=NULL)//右子树不空,将右子树根结点入队
+            q.push(p->rchild);
+    }
+}
+
+void Reverse_LevelOrder(BiTree T)
+{
+    queue<BiTNode *> q;//此处为了方便使用c++中的stl
+    stack<BiTNode *> sta;
+
+    q.push(T);//将根结点入队
+
+    while(q.empty()==0)
+    {
+        BiTNode *p=q.front();//队头结点出队
+
+        sta.push(p);//入栈
+        q.pop();
+
+        if(p->lchild!=NULL)//左子树不空,将左子树根结点入队
+            q.push(p->lchild);
+        if(p->rchild!=NULL)//右子树不空,将右子树根结点入队
+            q.push(p->rchild);
+    }
+
+    while(sta.size()>0)
+    {
+        BiTNode *p=sta.top();
+        visit(p);//访问栈顶元素
+        sta.pop();
+    }
+}
+```
+
+#### 5.3.5
+
+>  假设二叉树采用二叉链表存储结构，设计一个非递归算法求二叉树的高度。
+
+* 递归做法(非题目要求)
+
+```cpp
+int treeDepth(BiTree T)
+{
+    if(T==NULL)
+        return 0;
+    else
+    {
+        int l=treeDepth(T->lchild);
+        int r=treeDepth(T->rchild);
+        return l>r?l+1:r+1;
+    }
+}
+```
+
+* 非递归做法
+
+```cpp
+int treeDepth(BiTree T)
+{
+    if(T==NULL)
+        return 0;
+    
+    int maxdepth=0;
+
+    queue<node> q;//此处为了方便使用c++中的stl
+
+    q.push({T,1});//将根结点入队
+
+    while(q.empty()==0)
+    {
+        node temp=q.front();//队头结点出队
+        q.pop();
+        
+        maxdepth=max(maxdepth,temp.depth);//更新值
+        maxdepth=temp.depth;//由于是层序遍历,必然深度越大的,后访问,故可直接更新
+
+        if(temp.p->lchild!=NULL)//左子树不空,将左子树根结点入队
+            q.push({temp.p->lchild,temp.depth+1});
+        if(temp.p->rchild!=NULL)//右子树不空,将右子树根结点入队
+            q.push({temp.p->rchild,temp.depth+1});
+    }
+
+    return maxdepth;
+}
+```
+
+#### 5.3.6
+
+>  设一棵二叉树中各结点的值互不相同，其先序遍历序列和中序遍历序列分别存于两个一维数组 $A[ 1 \cdots n]$和 $B[1 \cdots n]$中，试编写算法建立该二叉树的二叉链表。
+
+根据二叉树的先序遍历序列和中序遍历序列可以创建一棵唯一的二叉树。先序遍历的第一个结点，是二叉树的根节点，在中序遍历找到根结点后，可以知道根节点的左右子树的结点和左右子树的结点数(用 $left\_size$和 $right\_size$表示），然后递归分别建立其左右子树，依次扫描二叉树先序序列，然后在中序序列中找到该结点从而确定该结点下的左右子树，直到左右子树的结点数为 $0$时( $left\_size=0$和 $right\_size=0$)，二叉树建立完毕。
+
+```cpp
+BiTree CreateBiTree_by_Pre_and_In(ElemType a[],ElemType b[],int la,int ra,int lb,int rb)
+{
+    BiTNode *root=(BiTNode *)malloc(sizeof(BiTNode));
+
+    root->value=a[la];//当前先序第一个元素
+
+    int pos=lb;
+
+    while(b[pos]!=a[la])//找到当前段中序遍历等于当前先序的第一个元素
+        pos++;
+    
+    int left_size=pos-lb;//左子树长度
+    int right_size=rb-pos;//右子树长度
+
+    if(left_size>0)//建立左子树
+        root->lchild=CreateBiTree_by_Pre_and_In(a, b, la+1, la+left_size, lb,lb+left_size-1);
+    else root->lchild=NULL;//左子树为空
+
+    if(right_size>0)
+        root->rchild=CreateBiTree_by_Pre_and_In(a, b, ra-right_size+1, ra, rb-right_size+1, rb);
+    else root->rchild=NULL;
+
+    return root;
+}
+
+ElemType pre_list[MaxSize];
+ElemType in_list[MaxSize];
+
+BiTree T=CreateBiTree_by_Pre_and_In(pre_list, in_list, 1, n, 1, n);
+```
+
