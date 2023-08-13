@@ -1020,3 +1020,50 @@ ElemType in_list[MaxSize];
 BiTree T=CreateBiTree_by_Pre_and_In(pre_list, in_list, 1, n, 1, n);
 ```
 
+#### 5.3.7
+
+>  二叉树按二叉链表形式存储，写一个判别给定二叉树是否是完全二叉树的算法。
+
+采用层次遍历。只有一下两种情况出现时，一棵树才不是完全二叉树
+
+- 一个节点的左子树为空，右子树非空
+- 在 $n$层遇到过非空节点，然后在 $n+1$层又遇到了非空节点
+
+```cpp
+bool isCompleteTree(BiTree T)
+{
+    if(T==NULL)
+        return true;
+    queue<BiTNode *> q;//此处为了方便使用c++中的stl
+
+    q.push(T);//将根结点入队
+
+    bool flag=false;//用来标记是否遇到空
+    while(q.empty()==0)
+    {
+        int cnt=q.size();//当前层的个数
+
+        while(cnt--)
+        {
+            BiTNode *p=q.front();//队头结点出队
+            q.pop();
+        
+            if(p->lchild==NULL&&p->rchild!=NULL)//左子树空，右子树不空
+                return false;
+
+            if(flag==true&&(p->lchild!=NULL||p->rchild!=NULL))//曾经遇到过空，又遇到了非空
+                return false;
+            
+            if(p->lchild==NULL||p->rchild==NULL)//遇到空,更新flag
+                flag=true;
+
+            if(p->lchild!=NULL)//左子树不空,将左子树根结点入队
+                q.push(p->lchild);
+            if(p->rchild!=NULL)//右子树不空,将右子树根结点入队
+                q.push(p->rchild);
+        }
+    }    
+    return true;
+}
+```
+
