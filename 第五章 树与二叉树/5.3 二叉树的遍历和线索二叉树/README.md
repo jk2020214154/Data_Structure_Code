@@ -1138,8 +1138,8 @@ void LevelOrder(BiTree T)//层次遍历
 **方法二**:通过递归式**计算双分支结点个数** $F(p)$
 
 * 当结点 $p$为 $NULL$时, $F(p)=0$;
-* 当结点 $p$为双分支结点时(左右节点都不为空), $F(p)=F(p\to lchild)+F(p \to rchild)+1$;
-* 反之(即结点 $p$为单分支结点或叶子结点), $F(p)=F(p\to lchild)+F(p \to rchild)$.
+* 当结点 $p$为**双分支结点**时(左右节点都不为空), $F(p)=F(p\to lchild)+F(p \to rchild)+1$;
+* 反之(即结点 $p$为**单分支结点**或**叶子结点**), $F(p)=F(p\to lchild)+F(p \to rchild)$.
 
 ```cpp
 int Calc_Double_Brach(BiTree T)
@@ -1238,9 +1238,9 @@ void Delete_X(BiTree &T,ElemType e)
 
 #### 5.3.12
 
->  在二叉树中查找值为x的结点，试编写算法（用C语言）打印值为x的结点的所有祖先，假设值为x的结点不多于一个。
+>  在二叉树中查找值为 $x$的结点，试编写算法（用 $C$语言）打印值为 $x$的结点的所有祖先，假设值为 $x$的结点不多于一个。
 
-* 递归版
+* **递归版**
 
 ```cpp
 void visit(BiTNode * p)//访问当前结点的数据
@@ -1264,7 +1264,7 @@ int Search_Ancestor(BiTree T,ElemType e)
 }
 ```
 
-* 非递归版
+* **非递归版**
 
 采用非递归后序遍历,最后访问根节点,访问到值为 $x$的结点时,栈中所有元素均为该结点的祖先,依次出栈即可
 
