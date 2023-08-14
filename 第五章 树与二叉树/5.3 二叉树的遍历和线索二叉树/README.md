@@ -1067,3 +1067,266 @@ bool isCompleteTree(BiTree T)
 }
 ```
 
+#### 5.3.8
+
+>  假设二叉树采用二叉链表存储结构存储，试设计一个算法，计算一棵给定二叉树的所有双分支结点个数。
+
+**方法一**:通过 $4$种遍历方式,访问根节点时判断是否左右子树都存在
+
+```cpp
+int ans=0;
+
+void visit(BiTNode * p)//访问当前结点的数据
+{
+    //cout << p->value << " ";
+    if(p->lchild!=NULL&&p->rchild!=NULL)
+        ans++;
+}
+
+void PreOrder(BiTree T)//前序遍历
+{
+    if(T!=NULL)
+    {
+        visit(T);//访问根节点
+        PreOrder(T->lchild);//递归遍历左子树
+        PreOrder(T->rchild);//递归遍历右子树
+    }
+}
+
+
+void InOrder(BiTree T)//中序遍历
+{
+    if(T!=NULL)
+    {
+        InOrder(T->lchild);//递归遍历左子树
+        visit(T);//访问根节点
+        InOrder(T->rchild);//递归遍历右子树
+    }
+}
+
+
+void PostOrder(BiTree T)//后序遍历
+{
+    if(T!=NULL)
+    {
+        PostOrder(T->lchild);//递归遍历左子树
+        PostOrder(T->rchild);//递归遍历右子树
+        visit(T);//访问根结点
+    }
+}
+
+void LevelOrder(BiTree T)//层次遍历
+{
+    queue<BiTNode *> q;//此处为了方便使用c++中的stl
+
+    q.push(T);//将根结点入队
+
+    while(q.empty()==0)
+    {
+        BiTNode *p=q.front();//队头结点出队
+        q.pop();
+        visit(p);//访问队头元素
+
+        if(p->lchild!=NULL)//左子树不空,将左子树根结点入队
+            q.push(p->lchild);
+        if(p->rchild!=NULL)//右子树不空,将右子树根结点入队
+            q.push(p->rchild);
+    }
+}
+```
+
+**方法二**:通过递归式**计算双分支结点个数** $F(p)$
+
+* 当结点 $p$为 $NULL$时, $F(p)=0$;
+* 当结点 $p$为双分支结点时(左右节点都不为空), $F(p)=F(p\to lchild)+F(p \to rchild)+1$;
+* 反之(即结点 $p$为单分支结点或叶子结点), $F(p)=F(p\to lchild)+F(p \to rchild)$.
+
+```cpp
+int Calc_Double_Brach(BiTree T)
+{
+    if(T==NULL)//结点为空
+        return 0;
+    else if(T->lchild!=NULL&&T->rchild!=NULL)//当前是双分支结点
+        return Calc_Double_Brach(T->lchild)+Calc_Double_Brach(T->rchild)+1;
+    else return Calc_Double_Brach(T->lchild)+Calc_Double_Brach(T->rchild);//叶子结点或单分子结点
+}
+```
+
+#### 5.3.9
+
+>  设树 $B$是一棵采用链式结构存储的二叉树，编写一个把树 $B$中所有结点的左、右子树进行交换的函数。
+
+采用递归算法实现交换二叉树的左、右子树,首先交换**左孩子**的左、右子树,再交换**右孩子**的左、右子树,最后交换当前根结点的左、右孩子,当结点为空时递归结束
+
+```cpp
+void Swap_Left_Right_Tree(BiTree T)
+{
+    if(T!=NULL)
+    {
+        Swap_Left_Right_Tree(T->lchild);//处理左孩子
+        Swap_Left_Right_Tree(T->rchild);//处理右孩子
+
+        //处理当前根结点
+        BiTNode *temp=T->lchild;
+        T->lchild=T->rchild;
+        T->rchild=temp;
+    }
+}
+```
+
+#### 5.3.10
+
+>  假设二叉树采用二叉链存储结构存储，设计一个算法，求先序遍历序列中第 $k$ (  $1 \leq k \leq $二叉树中结点个数)个结点的值。
+
+用全局变量 $cnt$记录当前访问的个数,当先序遍历访问到第 $k$个结点时,输出它的值.
+
+```cpp
+void visit(BiTNode * p)//访问当前结点的数据
+{
+    cout << p->value << " ";
+}
+
+int cnt=0;
+void PreOrder(BiTree T,int k)//前序遍历
+{
+    if(T!=NULL)
+    {
+        cnt++;//个数+1
+        if(cnt==k)//当到达第 k个元素访问
+        {
+            visit(T);//访问根节点
+            return ;
+        }
+        PreOrder(T->lchild,k);//递归遍历左子树
+        PreOrder(T->rchild,k);//递归遍历右子树
+    }
+}
+```
+
+#### 5.3.11
+
+>  已知二叉树以二叉链表存储，编写算法完成:对于树中每个元素值为 $x$的结点，删去以它为根的子树，并释放相应的空间.
+
+```cpp
+void ReleaseTree(BiTree t)//释放二叉树空间
+{ 
+  	if(t!=NULL){
+    	ReleaseTree(t->lchild);
+    	ReleaseTree(t->rchild);
+    	free(t);
+  	}
+}
+
+void Delete_X(BiTree &T,ElemType e)
+{
+    if(T==NULL)
+        return ;
+    
+    if(T->value==e)//若T的value为想要删除的元素,则进行删除
+    {
+        ReleaseTree(T);//删除包括根节点
+        T=NULL;//手动赋值为NULL
+    }
+    
+    if(T!=NULL)
+    {
+        Delete_X(T->lchild, e);
+        Delete_X(T->rchild, e);
+    }
+}
+```
+
+#### 5.3.12
+
+>  在二叉树中查找值为x的结点，试编写算法（用C语言）打印值为x的结点的所有祖先，假设值为x的结点不多于一个。
+
+* 递归版
+
+```cpp
+void visit(BiTNode * p)//访问当前结点的数据
+{
+    cout << p->value << " ";
+}
+
+int Search_Ancestor(BiTree T,ElemType e)
+{
+    if(T==NULL)//空结点返回
+        return 0;
+    if(T->value==e)
+        return 1;
+    
+    if(Search_Ancestor(T->lchild, e)==1||Search_Ancestor(T->rchild, e)==1)//左子树或右子树找到
+    {
+        visit(T);
+        return 1;
+    }
+    else return 0;
+}
+```
+
+* 非递归版
+
+采用非递归后序遍历,最后访问根节点,访问到值为 $x$的结点时,栈中所有元素均为该结点的祖先,依次出栈即可
+
+```cpp
+typedef struct StackNode{
+    BiTNode *bitnode;
+    bool isFirst;
+}StackNode;
+
+void Search_Ancestor(BiTree T,ElemType e)
+{
+    if(T==NULL)//空结点返回
+        return ;
+    stack<StackNode* > sta;//此处为了方便使用c++中的stl
+
+    BiTNode *p=T;
+
+    while(p!=NULL||sta.empty()==0)//p不空或栈不空
+    {
+        if(p!=NULL)//一路向左
+        {
+            StackNode *new_node=(StackNode *)malloc(sizeof(StackNode));
+            new_node->bitnode=p;
+            new_node->isFirst=true;//标记第一次访问
+            
+            //s.push(p);//当前结点入栈
+            sta.push(new_node);
+
+            p=p->lchild;//左孩子不空,一直向左走
+        }
+        else//出栈,并转向出栈结点的右子树
+        {
+            StackNode *temp_node=sta.top();//获取栈顶
+            sta.pop();//栈顶元素出栈
+
+            if(temp_node->isFirst==true)//表示是第一次出现在栈顶(从左子树返回)
+            {
+                temp_node->isFirst=false;
+                sta.push(temp_node);
+                p=temp_node->bitnode->rchild;//向右子树走,p赋值为当前出栈元素的右孩子
+            }
+            else//第二次出现在栈顶 
+            {
+                p=NULL;//结点访问完后,重置p指针
+            }
+        }
+
+        if(p!=NULL&&p->value==e)
+        {
+            while(sta.size()>0)
+            {
+                StackNode *temp_node=sta.top();//获取栈顶
+                visit(temp_node->bitnode);
+                sta.pop();//栈顶元素出栈                
+            }
+            return ;
+        }
+    }
+}
+```
+
+#### 5.3.13
+
+>  设一棵二叉树的结点结构为( $LLINK,INFO,RLINK$)， $ROOT $为指向该二叉树根结点的指针， $p$和 $q$分别为指向该二叉树中任意两个结点的指针，试编写算法`ANCESTOR(ROOT,p,q,r)`，找到 $p$和 $q$的最近公共祖先结点 $r$.
+
