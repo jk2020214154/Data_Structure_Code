@@ -1330,3 +1330,32 @@ void Search_Ancestor(BiTree T,ElemType e)
 
 >  设一棵二叉树的结点结构为( $LLINK,INFO,RLINK$)， $ROOT $为指向该二叉树根结点的指针， $p$和 $q$分别为指向该二叉树中任意两个结点的指针，试编写算法`ANCESTOR(ROOT,p,q,r)`，找到 $p$和 $q$的最近公共祖先结点 $r$.
 
+* **递归做法**
+
+```cpp
+BiTNode* Search_Common_Ancestor(BiTree T,BiTNode *p,BiTNode *q)
+{
+    if(T==NULL||p==NULL||q==NULL)
+        return NULL;
+    if(p==T||q==T)
+        return T;
+    
+    BiTNode *left_lca=Search_Common_Ancestor(T->lchild, p, q);
+    BiTNode *right_lca=Search_Common_Ancestor(T->rchild, p, q);
+
+    if(left_lca!=NULL&&right_lca!=NULL)
+        return T;
+    else if(left_lca==NULL)
+        return right_lca;
+    else
+        return left_lca;
+}
+```
+
+* **非递归做法**
+
+![](https://cdn.acwing.com/media/article/image/2023/08/15/85276_0bdf46fc3b-20230815204053.png) 
+
+```cpp
+```
+
