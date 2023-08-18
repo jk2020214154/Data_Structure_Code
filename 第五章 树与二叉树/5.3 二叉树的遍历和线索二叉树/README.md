@@ -1357,11 +1357,272 @@ BiTNode* Search_Common_Ancestor(BiTree T,BiTNode *p,BiTNode *q)
 ![](https://cdn.acwing.com/media/article/image/2023/08/15/85276_0bdf46fc3b-20230815204053.png) 
 
 ```cpp
+typedef struct StackNode{
+    BiTNode *bitnode;
+    bool isFirst;
+}StackNode;
+
+//此处设p1在p2左边
+BiTNode* Search_Common_Ancestor(BiTree T,BiTNode *p1,BiTNode *p2)
+{
+    if(p1==p2)
+        return p1;
+    stack<StackNode* > s;//此处为了方便使用c++中的stl
+
+    stack<StackNode* > temp1,temp2;//存储两个的祖先的栈
+
+    vector<BiTNode*> v1,v2;//分别存储各自的祖先
+
+    int flag=0;//标记是否经过p
+    BiTNode *p=T;
+
+    while(p!=NULL||s.empty()==0)//p不空或栈不空
+    {
+        if(p!=NULL)//一路向左
+        {
+            StackNode *new_node=(StackNode *)malloc(sizeof(StackNode));
+            new_node->bitnode=p;
+            new_node->isFirst=true;//标记第一次访问
+            
+            //s.push(p);//当前结点入栈
+            s.push(new_node);
+            if(flag==0)
+                temp1.push(new_node);
+            temp2.push(new_node);
+
+            p=p->lchild;//左孩子不空,一直向左走
+        }
+        else//出栈,并转向出栈结点的右子树
+        {
+            
+            StackNode *temp_node=s.top();//获取栈顶
+            s.pop();//栈顶元素出栈
+            if(flag==0)
+                temp1.pop();
+            temp2.pop();
+
+            if(temp_node->isFirst==true)//表示是第一次出现在栈顶(从左子树返回)
+            {
+                temp_node->isFirst=false;
+                s.push(temp_node);
+                if(flag==0)
+                    temp1.push(temp_node);
+                temp2.push(temp_node);
+
+                p=temp_node->bitnode->rchild;//向右子树走,p赋值为当前出栈元素的右孩子
+            }
+            else//第二次出现在栈顶 
+            {
+                if(temp_node->bitnode==p1)
+                {
+                    flag=1;
+                    while(temp1.size()>0)
+                        v1.push_back(temp1.top()->bitnode),temp1.pop();
+                }
+                
+                if(temp_node->bitnode==p2)
+                {
+                    while(temp2.size()>0)
+                        v2.push_back(temp2.top()->bitnode),temp2.pop();                    
+                    // for(int i=0;i<v1.size();i++)
+                        // cout << v1[i]->value << " ";
+                    // cout << endl;
+                    // for(int i=0;i<v2.size();i++)
+                        // cout << v2[i]-> value << " ";
+                    // cout << endl;
+                    for(int i=0;i<v1.size();i++)
+                        for(int j=0;j<v2.size();j++)
+                            if(v1[i]==v2[j])
+                                return v1[i];
+                }
+                p=NULL;//结点访问完后,重置p指针
+            }
+        }
+    }
+    return NULL;
+}
 ```
 
 #### 5.3.14
 
+>  假设二叉树采用二叉链表存储结构，设计一个算法，求非空二叉树 $b$的宽度（即具有结点数最多的那一层的结点个数).
 
+层序遍历找到每层中的结点个数即可,用结构体保存当前结点指针和层数
+
+```cpp
+typedef struct QueueNode{
+    BiTNode *bitnode;
+    int level;
+}QueueNode;
+
+
+int Calc_Width(BiTree T)//层次遍历
+{
+    if(T==NULL)
+        return 0;
+    
+    queue<QueueNode> q;//此处为了方便使用c++中的stl
+    QueueNode temp={T,1};
+    q.push(temp);//将根结点入队
+
+    int last=0,maxx=0;//记录上一层
+
+    int tot=0;
+
+    while(q.empty()==0)
+    {
+        QueueNode new_node=q.front();//队头结点出队
+        q.pop();
+        
+    
+        if(last!=new_node.level)//更新上一层的最大值
+        {
+            if(tot>maxx)
+                maxx=tot;
+            tot=1;
+            last=new_node.level;
+        }
+        else tot++;
+
+        if(new_node.bitnode->lchild!=NULL)//左子树不空,将左子树根结点入队
+        {
+            temp.bitnode=new_node.bitnode->lchild;
+            temp.level=new_node.level+1;
+            q.push(temp);
+        }
+        
+        if(new_node.bitnode->rchild!=NULL)//右子树不空,将右子树根结点入队
+        {
+            temp.bitnode=new_node.bitnode->rchild;
+            temp.level=new_node.level+1;
+            q.push(temp);
+        }
+    }
+
+    maxx=max(maxx,tot);
+    return maxx;
+}
+```
 
 #### 5.3.15
 
+>  设有一棵满二叉树（所有结点值均不同)，已知其先序序列为 $pre$，设计一个算法求其后序序列 $post$。
+
+对满二叉树,任意一个结点的左、右子树均**含有相等**的结点数,同时,先序序列的第一个结点作为后序序列的最后一个结点.递归实现,每一次递归的结果就是将先序序列的第一个结点放到后序序列的最后一个结点,直至这个二叉树的递归完成.
+
+```cpp
+void Pre_To_Post(ElemType pre[],ElemType post[],int l1,int r1,int l2,int r2)
+{
+    if(l1<=r1)
+    {
+        post[r2]=pre[l1];//先序的第一个元素是后序最后一个元素
+        int mid=(r1-l1)/2;
+        Pre_To_Post(pre, post, l1+1, l1+mid, l2, l2+mid-1);//左子树
+        //左子树元素个数为mid-1(刨去根)
+        Pre_To_Post(pre, post, l1+mid+1, r1, l2+mid, r2-1);//右子树
+        //后序最后一个元素被占据
+    }
+}
+```
+
+#### 5.3.16
+
+>  设计一个算法将二叉树的叶结点按从左到右的顺序连成一个单链表，表头指针为 $head$.二叉树按二叉链表方式存储，链接时用叶结点的右指针城来存放单链表指针。
+
+设置前驱结点指针 $pre$,初始为空.第一个叶结点由指针 $head$指向,遍历(前序,中序和后序都可以)到叶子结点,将它前驱的 $rchild$指向它,最后一个叶子结点的 $rchild$为空.
+
+```cpp
+LinkList head,pre=NULL;
+
+LinkList Get_Leaf_List(BiTree T)//中序遍历
+{
+    if(T!=NULL)
+    {
+        Get_Leaf_List(T->lchild);//递归遍历左子树
+        
+        if(T->lchild==NULL&&T->rchild==NULL)
+        {
+            if(pre==NULL)//第一个叶子结点
+                head=T,pre=T;
+            else
+            {
+                pre->rchild=T;
+                pre=T;
+            }
+        }
+
+        Get_Leaf_List(T->rchild);//递归遍历右子树
+    }
+    return head;
+}
+```
+
+#### 5.3.17
+
+>  试设计判断两棵二叉树是否相似的算法。所谓二叉树 $T_1$和 $T_2$相似，指的是 $T_1$和 $T_2$都是空的二叉树或都只有一个根结点;或 $T_1$的左子树和 $T_2$的左子树是相似的，且 $T_1$的右子树和 $T_2$的右子树是相似的.
+
+若 $T_1$和 $T_2$都是空树,则相似;若有一个为空另一个不空,则必然不相似;否则**递归**比较它们的左、右子树是否相似.
+
+```cpp
+bool isSimilar(BiTree T1,BiTree T2)
+{
+    if(T1==NULL&&T2==NULL)//均为空
+        return true;
+    else if(T1==NULL||T2==NULL)//有一个树为空另一个树不空
+        return false;
+    else
+    {
+        bool left_sim=isSimilar(T1->lchild, T2->lchild);//左子树相似
+        bool right_sim=isSimilar(T1->rchild, T2->rchild);//右子树相似
+        return left_sim&&right_sim;//两者都成立时相似
+    }
+}
+```
+
+#### 5.3.18
+
+>  写出在中序线索二叉树里查找指定结点在后序的前驱结点的算法.
+
+在二叉树后序序列中，对于结点 $p$，其前驱依次有可能是：
+
+*  $p$的**右孩子**
+* 没有右孩子，那就可能是**左孩子**
+* 没有孩子，那就可能是其**父结点的左孩子**
+* 否则,可能是其**爷爷结点的左孩子**
+* $\cdots$
+* 以此类推(即找**最近的祖先结点的左孩子**)。
+
+中序线索二叉树中， $p$无左孩子，则其左指针域指向**其父**，故可向上访问，直到有一个祖先有左孩子，则这个左孩子一定是后序遍历 $p$的前驱。
+
+```cpp
+ThreadNode * Get_PostPre_By_InOrder(ThreadNode * p)
+{
+    if(p==NULL)
+        return NULL;
+    if(p->rtag==0)//有右孩子,则右孩子是它的前驱
+        return p->rchild;
+    else if(p->ltag==0)//只有左孩子,则右孩子是它的前驱
+        return p->lchild;
+    
+    while(p!=NULL&&p->ltag==1)//p的最近的<祖先的左孩子>
+        p=p->lchild;
+    
+    if(p!=NULL)
+        return p->lchild;
+    else return NULL;
+}
+```
+
+#### 5.3.19
+
+>  **2014统考真题**：二叉树的带权路径长度( $WPL$)是二叉树中所有叶结点的带权路径长度之和。给定一棵二叉树 $T$，采用二叉链表存储，结点结构为
+>
+> ![](https://cdn.acwing.com/media/article/image/2023/08/18/85276_0883fb713d-20230818173027.png) 
+>
+> 其中叶节点的 $weight$域保存该结点的非负权值,设 $root$为指向 $T$的根结点的指针,请设计求 $T$的 $WPL$的算法,要求:
+>
+> 1)给出算法的基本设计思想;
+>
+> 2)使用 `C`或 `C++`语言,给出二叉树结点的数据类型定义;
+>
+> 3)根据设计思想,采用 `C`或 `C++`语言描述算法,关键之处给出注释.
