@@ -82,8 +82,8 @@ bool isSimilar(BiTree T1,BiTree T2)
         return false;
     else
     {
-        bool left_sim=isSimilar(T1->lchild, T2->lchild);//左子树相似
-        bool right_sim=isSimilar(T1->rchild, T2->rchild);//右子树相似
+        bool left_sim=isSimilar(T1->lchild, T2->lchild);//左子树是否相似
+        bool right_sim=isSimilar(T1->rchild, T2->rchild);//右子树是否相似
         return left_sim&&right_sim;//两者都成立时相似
     }
 }

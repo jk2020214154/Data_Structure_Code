@@ -1572,8 +1572,8 @@ bool isSimilar(BiTree T1,BiTree T2)
         return false;
     else
     {
-        bool left_sim=isSimilar(T1->lchild, T2->lchild);//左子树相似
-        bool right_sim=isSimilar(T1->rchild, T2->rchild);//右子树相似
+        bool left_sim=isSimilar(T1->lchild, T2->lchild);//左子树是否相似
+        bool right_sim=isSimilar(T1->rchild, T2->rchild);//右子树是否相似
         return left_sim&&right_sim;//两者都成立时相似
     }
 }
@@ -1626,3 +1626,132 @@ ThreadNode * Get_PostPre_By_InOrder(ThreadNode * p)
 > 2)使用 `C`或 `C++`语言,给出二叉树结点的数据类型定义;
 >
 > 3)根据设计思想,采用 `C`或 `C++`语言描述算法,关键之处给出注释.
+
+1)可以递归或非递归实现
+
+* 递归(**前序、中序和后序遍历**)
+
+![](https://cdn.acwing.com/media/article/image/2023/08/18/85276_f6d7e9d63d-20230818175048.png) 
+
+* 非递归(**层序遍历**)
+
+![](https://cdn.acwing.com/media/article/image/2023/08/18/85276_08490bc23d-20230818175223.png) 
+
+2)
+
+```cpp
+typedef int ElemType;
+
+typedef struct BiTNode{
+    ElemType weight;//结点中的顺序元素
+    struct BiTNode *lchild,*rchild;    
+    //struct BiTNode *parent;
+}BiTNode,*BiTree;
+```
+
+3)
+
+* 递归
+
+```cpp
+int wpl_res=0;
+
+void Wpl_PreOrder(BiTree T,int depth)
+{
+    if(T!=NULL)
+    {
+        if(T->lchild==NULL&&T->rchild==NULL)//叶子结点
+            wpl_res+=(depth-1)*T->weight;//注意是路径,不是深度
+
+        if(T->lchild!=NULL)
+            Wpl_PreOrder(T->lchild, depth+1);
+        if(T->rchild!=NULL)
+            Wpl_PreOrder(T->rchild, depth+1);
+    }
+    
+}
+
+int Calc_Wpl(BiTree T)
+{
+    wpl_res=0;
+    Wpl_PreOrder(T,1);
+    return wpl_res;
+}
+```
+
+* 非递归
+
+```cpp
+typedef struct QueueNode{
+    BiTNode *bitnode;
+    int level;
+}QueueNode;
+
+int Calc_Wpl(BiTree T)
+{
+    int wpl_res=0;
+
+    if(T==NULL)
+        return 0;
+    
+    queue<QueueNode> q;//此处为了方便使用c++中的stl
+    QueueNode temp={T,1};
+    q.push(temp);//将根结点入队
+
+
+    while(q.empty()==0)
+    {
+        QueueNode new_node=q.front();//队头结点出队
+        q.pop();
+
+        if(new_node.bitnode->lchild==NULL&&new_node.bitnode->rchild==NULL)
+            wpl_res+=(new_node.level-1)*new_node.bitnode->weight;
+
+        if(new_node.bitnode->lchild!=NULL)//左子树不空,将左子树根结点入队
+        {
+            temp.bitnode=new_node.bitnode->lchild;
+            temp.level=new_node.level+1;
+            q.push(temp);
+        }
+        
+        if(new_node.bitnode->rchild!=NULL)//右子树不空,将右子树根结点入队
+        {
+            temp.bitnode=new_node.bitnode->rchild;
+            temp.level=new_node.level+1;
+            q.push(temp);
+        }
+    }
+    return wpl_res;
+}
+```
+
+#### 5.3.20
+
+>  **2017统考真题**：请设计一个算法，将给定的表达式树（二叉树）转换为等价的中缀表达式(通过括号反映操作符的计算次序）并输出。例如，当下列两棵表达式树作为算法的输入时:
+>
+> ![](https://cdn.acwing.com/media/article/image/2023/08/18/85276_0872fd8a3d-20230818181423.png) 
+>
+> 输出的等价中缀表达式分别为`(a+b)*(c*(-d))`和`(a*b)+(-(c-d))`。 二叉树结点定义如下:
+
+```cpp
+typedef struct node{ 
+    char data[10]; //存储操作数或操作符 
+    struct node *left, *right; 
+}
+BTree;
+```
+
+> 要求:
+>
+> 1)给出算法的基本设计思想;
+>
+> 2)根据设计思想,采用 `C`或 `C++`语言描述算法,关键之处给出注释.
+
+
+
+
+
+
+
+#### 5.3.21
+
