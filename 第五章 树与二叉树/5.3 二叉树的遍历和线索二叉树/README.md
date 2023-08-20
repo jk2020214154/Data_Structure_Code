@@ -1764,7 +1764,7 @@ typedef struct {                    // MAX_SIZE为已定义常量
 }SqBiTree;
 ```
 
->   $T$中不存在的结点在数组 $SqBiTNode$中用 $-1$表示。例如，对于下图所示的两棵非空二叉树 $T1$和  $T2$：
+>   $T$中不存在的结点在数组 $SqBiTNode$中用 $-1$表示。例如，对于下图所示的两棵非空二叉树 $T_1$和  $T_2$：
 >
 > ![](https://cdn.acwing.com/media/article/image/2023/08/20/85276_66778f833f-20230820214909.png) 
 >
