@@ -1855,7 +1855,7 @@ bool isValidBST(SqBiTree T)
 }
 ```
 
-优化**空间复杂度**,使用一个变量 $prev$记录前驱,由于非空二叉树 $T$的结点值均为正数,初始化 $prev=0$.
+* 优化**空间复杂度**,使用一个变量 $prev$记录前驱,由于非空二叉树 $T$的结点值均为正数,初始化 $prev=0$.
 
 ```cpp
 bool InOrder(SqBiTree T,int id,ElemType &prev)
