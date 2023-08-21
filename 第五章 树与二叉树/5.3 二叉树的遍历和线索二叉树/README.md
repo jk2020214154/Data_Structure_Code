@@ -33,7 +33,7 @@ void PreOrder(BiTree T)//前序遍历
 
 >  访问结点的时机取决于是哪种遍历(前序遍历、中序遍历、后序遍历)
 >
->  1)**访问结点 **$P$，并将结点 $P$入栈;
+>  1)**访问结点 ** $P$，并将结点 $P$入栈;
 >
 >  2)判断结点 $P$的左孩子是否为空，若为空，则取栈顶结点并进行出栈操作，并将栈顶结点的右孩子置为当前的结点 $P$，循环至1);若不为空，则将 $P$的左孩子置为当前的结点 $P$;
 >
@@ -1747,11 +1747,35 @@ BTree;
 >
 > 2)根据设计思想,采用 `C`或 `C++`语言描述算法,关键之处给出注释.
 
+1)表达式树的中序序列加上必要的括号即为等价的中缀表达式。可以基于二叉树的**中序遍历**策略得到所需的表达式。表达式树中分支结点所对应的子表达式的计算次序，由该分支结点所处的位置决定。为得到正确的中缀表达式， 需要在生成遍历序列的同时，在适当位置增加必要的括号。显然，表达式的最外层（对应根结点）及操作数（对应叶结点）不需要添加括号。
 
+2)除**根结点和叶结点**外，遍历到其他结点时在遍历 其左子树之前加上左括号，在遍历完右子树后加上右括号。
 
+```cpp
+void visit(BTree *p)//访问当前结点的数据
+{
+    printf(" %s ",p->data);
+}
 
+void InOrder(BTree *T,int depth)//中序遍历
+{
+    if(T==NULL)
+        return ;
+    if(T->left!=NULL||T->right)
+    {
+        if(depth>1)
+            cout << "(";
+        InOrder(T->left,depth+1);//递归遍历左子树
+        visit(T);//访问根节点
+        InOrder(T->right,depth+1);//递归遍历右子树
+        if(depth>1)
+            cout << ")";
+    }
+    else visit(T);
+}
 
-
+InOrder(T,1);
+```
 
 #### 5.3.21
 
@@ -1773,3 +1797,85 @@ typedef struct {                    // MAX_SIZE为已定义常量
 > 1)给出算法的基本设计思想。
 >
 > 2)根据设计思想，采用`C`或`C++`语言描述算法，关键之处给出注释。
+
+将其填充为**完全二叉树**，按照层序遍历顺序填写编号：
+
+![](https://cdn.acwing.com/media/article/image/2023/08/21/85276_abe7aa4540-20230821221114.png) 
+
+如果根结点下标为 $0$,设编号为 $i$的结点,它的左孩子结点编号为 $2\times i+1$,它的右孩子结点编号为 $2\times i+2$.
+
+* **方法一**:递归
+
+利用二叉搜索树的性质: 设 $x$是二叉搜索树中的一个结点,如果 $y$是 $x$的**左子树**中的一个结点,那么 $y$的关键字 $\leq $ $x$的关键字;如果 $y$是 $x$的**右子树**中的一个结点,那么 $y$的关键字 $\geq $ $x$的关键字.
+
+```cpp
+bool check(SqBiTree T,int id,ElemType minx,ElemType maxx)
+{
+    if(id>=T.ElemNum||T.SqBiTNode[id]==-1)//越界或者为空结点
+        return true;
+    if(T.SqBiTNode[id]<=minx||T.SqBiTNode[id]>=maxx)
+        return false;
+    return check(T,2*id+1,minx,T.SqBiTNode[id])&&check(T, 2*id+2, T.SqBiTNode[id], maxx);
+}
+
+bool isValidBST(SqBiTree T)
+{
+    return check(T,0,INT_MIN,INT_MAX);
+}
+```
+
+* **方法二**:中序遍历
+
+利用二叉搜索树的性质的推论：中序遍历为**单调递增序列**。
+
+```cpp
+void InOrder(SqBiTree T,int id,vector<ElemType> &res)
+{
+    if(id>=T.ElemNum||T.SqBiTNode[id]==-1)//越界或者为空结点
+        return ;
+    InOrder(T, 2*id+1, res);
+    res.push_back(T.SqBiTNode[id]);
+    InOrder(T, 2*id+2, res);
+}
+
+bool isValidBST(SqBiTree T)
+{
+    vector<ElemType> res;
+
+    InOrder(T, 0, res);
+
+    int minx=res[0];//记录前驱结点的值
+    for(int i=1;i<res.size();i++)//检查中序遍历是否单调
+    {
+        if(res[i]<minx)
+            return false;
+        minx=res[i];
+    }
+    return true;
+}
+```
+
+优化**空间复杂度**,使用一个变量 $prev$记录前驱,由于非空二叉树 $T$的结点值均为正数,初始化 $prev=0$.
+
+```cpp
+bool InOrder(SqBiTree T,int id,ElemType &prev)
+{
+    if(id>=T.ElemNum||T.SqBiTNode[id]==-1)//越界或者为空结点
+        return true;
+    if(InOrder(T, 2*id+1, prev)==false)
+    //此处不能写成return InOrder(T, 2*id+1, prev);
+    //当是true的时候需看右孩子
+        return false;
+    if(T.SqBiTNode[id]<prev)
+        return false;
+    prev=T.SqBiTNode[id];
+    return InOrder(T, 2*id+2, prev);
+}
+
+bool isValidBST(SqBiTree T)
+{
+    ElemType prev=0;
+    return InOrder(T, 0, prev);
+}
+```
+
