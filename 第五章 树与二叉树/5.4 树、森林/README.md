@@ -117,6 +117,7 @@ typedef struct CSNode
 >
 > 对森林的先序遍历，效果等同于依次对各个树进行**后根**遍历，实质上，等同于依次对**二叉树的中序遍历**。
 >
+> 
 > ![](https://cdn.acwing.com/media/article/image/2023/08/28/85276_0377704d45-20230828171802.png)
 >
 > 中序遍历结果为: $\color{Red}{KLEFBGCMHIJD}$
