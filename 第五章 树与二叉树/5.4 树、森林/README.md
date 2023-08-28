@@ -315,11 +315,30 @@ $T$的高度至少为 $\left \lceil \log  _ 3 (244\times 2+1)\right \rceil=6$
 
 #### 5.4.3
 
+>  已知某二叉树的先序序列和中序序列分别为 $ABDEHCFIMGJKL$和 $DBHEAIMFCGKLJ$,请画出这棵二叉树,并画出二叉树对应的森林.
 
+左图为二叉树,右图为对应的森林.
+
+![](https://cdn.acwing.com/media/article/image/2023/08/28/85276_b653dfbd45-20230828210601.png) 
 
 #### 5.4.4
 
+>  编程求以孩子兄弟表示法存储的森林的叶结点数.
 
+当森林(树)以孩子兄弟表示法存储时,若结点的**指向结点第一个孩子结点的指针为空**,则说明为叶子结点.
+
+```cpp
+void Get_Leaves(CSTree t,int &tot)//通过引用传值
+{
+    if(t!=NULL)
+    {
+        Get_Leaves(t->firstchild,tot);
+        if(t->firstchild==NULL)
+            tot++;
+        Get_Leaves(t->nextsibling,tot);
+    }    
+}
+```
 
 #### 5.4.5
 
