@@ -311,9 +311,7 @@ $T$的高度至少为 $\left \lceil \log  _ 3 (244\times 2+1)\right \rceil=6$
 >
 > ![](https://cdn.acwing.com/media/article/image/2023/08/28/85276_7fe951e345-20230828203609.png) 
 
-
-
-
+![](https://cdn.acwing.com/media/article/image/2023/08/28/85276_c92a64e945-20230828205230.png) 
 
 #### 5.4.3
 
