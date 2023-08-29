@@ -342,13 +342,78 @@ void Get_Leaves(CSTree t,int &tot)//通过引用传值
 
 #### 5.4.5
 
+>  以孩子兄弟链表为存储结构,请设计递归算法求树的深度.
 
+孩子兄弟表示法中采用`左孩子右兄弟`,故只需递归比较`左孩子的深度+1`和`右兄弟的深度`即可.
+
+```cpp
+int Get_Height(CSTree t)
+{
+    if(t==NULL)
+        return 0;
+    else
+    {
+        int hchild=Get_Height(t->firstchild);
+        int hsibing=Get_Height(t->nextsibling);
+        return hchild+1>hsibing?hchild+1:hsibing;
+    }
+}
+```
 
 #### 5.4.6
 
+>  已知一棵树的层次序列及每个结点的度，编写算法构造此树的孩子-兄弟链表.
 
+由于层次遍历的顺序可以根据节点的度去充分地遍历每一个节点的兄弟，所以可以每次都把每一层节点的兄弟关系先链接好，并且由于父子关系只能查找一次，所以按照层序序列经过节点时，需要把其孩子节点链接上。
+所以按照层序次序遍历节点时，先链接上**第一个孩子节点**，然后链接上该节点的**全部兄弟节点**。
 
+```cpp
+void Init_Tree_By_LevelOrder(CSTree &t,ElemType e[],int degree[],int n)
+{
+    CSTree *temp=new CSTree[MAX_TREE_SIZE];
 
+    for(int i=0;i<=n-1;i++)//初始化赋值和置空
+    {
+        temp[i] = new CSNode;//一定记得初始化
+        temp[i]->data=e[i];
+        temp[i]->firstchild=temp[i]->nextsibling=NULL;
+    }
+
+    int pos=0;
+    for(int i=0;i<=n-1;i++)//遍历至第i个结点
+    {
+        if(degree[i]>0)//如果有孩子
+        {
+            temp[i]->firstchild=temp[++pos];//第一个孩子赋给孩子指针
+            for(int j=2;j<=degree[i];j++)
+            {
+                temp[pos]->nextsibling=temp[pos+1];//其余孩子处理:后一个赋给前一个的兄弟指针
+                pos++;
+            }
+        }
+    }
+    t=temp[0];
+    //delete []temp;
+}
+```
 
 #### 5.4.7
+
+>  **2016统考真题**：若一棵非空 $k$( $k \geq 2$）叉树 $T$中的每个非叶结点都有 $k$个孩子，则称 $T$为正则 $k$叉树。请回答下列问题并给出推导过程。
+>
+> 1)若 $T$有 $m$个非叶节点,则 $T$中的叶结点有多少个?
+>
+> 2)若 $T$的高度为 $h$(单节点的树 $h=1$),则 $T$的结点数最多有多少个?最少为多少个？
+
+1)设叶子结点的个数为 $n_0$,已知非叶子结点个数为 $m$,总个数为 $n$,则 $n=n_0+m$;
+
+又因为`边数=总结点数-1`,且边数由每个非叶子结点作出 $k$条边,故 $n-1=m\times k$;
+
+两式联立: $m\times k+1=n_0+m$,即叶子结点的个数为 $n_0=m\times(k-1)+1$
+
+2)当该树为满 $k$叉树时,此时 $T$的结点数最多为 $1+k^1+k^2+\cdots+k^{h-1}=\frac{1(1-k^h)}{1-k}=\frac{k^h-1}{k-1}$;
+
+当第 $1$层只有根结点,第 $2$到第 $h-1$层仅含 $1$个分支结点和 $k-1$个叶结点,第 $h$层有 $k$个叶结点(即即除根外第 $2$到第 $h$层中每层的结点数均为 $k$),此时 $T$的结点数最少,结果为 $1+k\times (h-1)$
+
+![](https://cdn.acwing.com/media/article/image/2023/08/29/85276_9e1bc33546-20230829155616.png) 
 
