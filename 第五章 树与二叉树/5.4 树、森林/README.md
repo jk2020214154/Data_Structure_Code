@@ -259,7 +259,7 @@ typedef struct CSNode
 
 由表知,此时**二叉树**的`先序`(或`中序`)遍历与**森林**的`先序`(或`中(后)序`)遍历相同,故可通过该先序和中序构造出二叉树,进而得到二叉树的后序遍历.
 
-![20230828201026.png](https://cdn.acwing.com/media/article/image/2023/08/28/85276_e77f4f5345-20230828201026.png) 
+![](https://cdn.acwing.com/media/article/image/2023/08/28/85276_e77f4f5345-20230828201026.png) 
 
 故二叉树的后序遍历为 $\color{Red}{b,f,e,d,c,a}$
 
