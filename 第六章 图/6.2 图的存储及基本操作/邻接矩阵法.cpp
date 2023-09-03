@@ -12,7 +12,7 @@ typedef int EdgeType;//带权图中边上权值的数据类型
 typedef struct{
     VertexType Vex[MaxVertexNum];//顶点表
     EdgeType Edge[MaxVertexNum][MaxVertexNum];//邻接矩阵,边表
-    int vernum,arcnum;//图的当前顶点数,图的边数/弧数
+    int vexnum,arcnum;//图的当前顶点数,图的边数/弧数
 }MGraph;
 
 
@@ -23,7 +23,7 @@ void Test()
 {
     MGraph mg;
 
-    cin >> mg.vernum >> mg.arcnum;
+    cin >> mg.vexnum >> mg.arcnum;
     
 /*
 4 4
@@ -53,14 +53,14 @@ ABCDEF
 */
 
     cin >> mg.Vex+1;
-    for(int i=1;i<=mg.vernum;i++)
-        for(int j=1;j<=mg.vernum;j++)
+    for(int i=1;i<=mg.vexnum;i++)
+        for(int j=1;j<=mg.vexnum;j++)
             cin >> mg.Edge[i][j];
 
-    for(int i=1;i<=mg.vernum;i++)
+    for(int i=1;i<=mg.vexnum;i++)
     {
         cout << "顶点:" << mg.Vex[i] << " " << "到达的点:";
-        for(int j=1;j<=mg.vernum;j++)
+        for(int j=1;j<=mg.vexnum;j++)
             if(mg.Edge[i][j]!=inf&&mg.Edge[i][j]!=0)
                 cout << mg.Vex[j] << " ";
         cout << endl;
