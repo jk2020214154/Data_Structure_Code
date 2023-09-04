@@ -300,5 +300,13 @@ void ALGraph_To_MGraph(ALGraph g1,MGraph &g2)
 
 2)
 
+矩阵 $A^2$如下图所示,其中位于第 $0$行第 $3$列的元素值 $A^2[0][3]=3$表示从顶点 $0$到顶点 $3$之间长度为 $2$的路径共有 $3$条.
+
+![](https://cdn.acwing.com/media/article/image/2023/09/04/85276_51ad1aa74b-20230904190747.png) 
+
+3)
+
+矩阵 $B^m$( $2\leq m \leq n$)中位于第 $i$行第 $j$列( $0 \leq i,j \leq n-1$)的非零元素的含义是：**图中从顶点 $i$到顶点 $j$的长度为 $m$的路径条数**.
+
 
 
