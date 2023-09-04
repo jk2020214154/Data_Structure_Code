@@ -308,5 +308,88 @@ void ALGraph_To_MGraph(ALGraph g1,MGraph &g2)
 
 矩阵 $B^m$( $2\leq m \leq n$)中位于第 $i$行第 $j$列( $0 \leq i,j \leq n-1$)的非零元素的含义是：**图中从顶点 $i$到顶点 $j$的长度为 $m$的路径条数**.
 
+#### 6.2.6
+
+>  **2021统考真题**：已知无向连通图 $G$由顶点集 $V$和边集 $E$组成, $\left| E \right| > 0$,当 $G$中度为奇数的顶点个数为不大于 $2$的偶数时, $G$存在包含所有边且长度为 $\left| E \right|$的路径(称为 $EL$路径).设图 $G$采用邻接矩阵存储,类型定义如下：
+
+```cpp
+typedef struct {                    // 图的定义
+    int numVertices, numEdges;      // 图中实际的顶点数和边数
+    char VerticesList[MAXV];        // 顶点表，MAXV为已定义常量
+    int Edge[MAXV][MAXV];           // 邻接矩阵
+}MGraph;
+```
+
+>  请设计算法`int IsExistEL(MGraph G)`,判断 $G$是否存在 $EL$路径,若存在,则返回 $1$,否则返回 $0$.要求：
+>
+> 1)给出算法的基本设计思想.
+>
+> 2)根据设计思想，采用`C`或`C++`语言描述算法，关键之处给出注释.
+>
+> 3)说明你所设计算法的时间复杂度和空间复杂度.
+
+本题提到了 $EL$路径,即欧拉路径. $EL$正是大名鼎鼎的**欧拉(Euler)**的缩写.
+
+**欧拉路径(Euler path)**：如果图 $G$中的一个路径包括每个边恰好一次.则该路径称为欧拉路径.
+
+![](https://cdn.acwing.com/media/article/image/2023/09/04/85276_f1ec37104b-20230904192638.png) 
+
+**无向图存在欧拉路径的充要条件：**度为奇数的点的数量为 $0$个或 $2$个,题目中也给出`奇数的顶点个数为不大于2的偶数`.
+
+- 第一步：统计所有点的度;
+- 第二步：统计所有点中度为奇数的点的个数;
+- 第三步：检查度为奇数的点个数是否为 $0$或者 $2$.
+
+```cpp
+int IsExistEL(MGraph G)
+{
+    int degree[MAXV];
+    for(int i=1;i<=G.numVertices;i++)//初始化置0
+        degree[i]=0;
+    
+    for(int i=1;i<=G.numVertices;i++)//遍历无向图统计所有点的度
+        for(int j=1;j<=G.numVertices;j++)
+            degree[i]+=G.Edge[i][j];
+    
+    int tot=0;//遍历degree数组统计度为奇数的点的个数
+    for(int i=1;i<=G.numVertices;i++)
+        if(degree[i]%2==1)
+            tot++;
+    //检查度为奇数的点个数是否为0或者2
+    if(tot==0||tot==2)//存在EL路径
+        return 1;
+    return 0;//存在EL路径
+}
+```
+
+时间复杂度为 $O(n^2)$,空间复杂度为 $O(n)$(开辟 $degree$数组).
+
+由于 $degree$可以在边计算完 $i$的度后可直接计算,故优化后时间复杂度依然是 $O(n^2)$,空间复杂度可优化为 $O(1)$.
+
+```cpp
+int IsExistEL(MGraph G)
+{
+    int tot=0;
+    for(int i=1;i<=G.numVertices;i++)//遍历无向图统计所有点的度
+    {
+        int degree=0;
+        for(int j=1;j<=G.numVertices;j++)
+            degree+=G.Edge[i][j];
+        if(degree%2==1)//统计度为奇数的点的个数
+            tot++;
+    }
+    //检查度为奇数的点个数是否为0或者2
+    if(tot==0||tot==2)//存在EL路径
+        return 1;
+    return 0;//存在EL路径
+}
+```
+
+
+
+
+
+
+
 
 
