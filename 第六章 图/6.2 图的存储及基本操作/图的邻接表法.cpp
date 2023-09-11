@@ -1,5 +1,5 @@
 #include<iostream>
-#include <limits.h>
+#include<limits.h>
 
 using namespace std;
 
@@ -30,6 +30,32 @@ int GetGraphIndex(ALGraph g,VertexType value)
         if(g.vertices[i].data==value)
             return i;
     return -1;
+}
+
+int FirstNeighbor(ALGraph G,int x)
+{
+    if(x>=1&&x<=G.vexnum)
+    {
+        if(G.vertices[x].first!=NULL)
+            return G.vertices[x].first->adjvex;
+    }
+    return -1;
+}
+
+int NextNeighbor(ALGraph G,int x,int y)
+{
+    ArcNode *temp=G.vertices[x].first;
+
+    while(temp!=NULL)
+    {
+        if(temp->adjvex==y)
+            break;
+        temp=temp->next;
+    }
+
+    if(temp==NULL||temp->next==NULL)
+        return -1;
+    else return temp->next->adjvex;
 }
 
 
@@ -102,13 +128,9 @@ F F
     {
         cout << "顶点:" << alg.vertices[i].data << " " << "到达的点:";
         
-        ArcNode *p=alg.vertices[i].first;
-
-        while(p!=NULL)
-        {
-            cout << alg.vertices[p->adjvex].data << " ";
-            p=p->next;
-        }
+        
+        for(int j=FirstNeighbor(alg, i);j!=-1;j=NextNeighbor(alg, i, j))
+            cout << alg.vertices[j].data << " ";
         cout << endl;
     }
 

@@ -1,5 +1,6 @@
 #include<iostream>
 #include<limits.h>
+#include<queue>
 
 using namespace std;
 
@@ -37,6 +38,36 @@ int NextNeighbor(MGraph G,int x,int y)
     return -1;
 }
 
+
+bool visited[MaxVertexNum];
+
+void visit(MGraph G,int pos)
+{
+    cout << G.Vex[pos] << " ";
+}
+
+void DFS(MGraph G,int start)
+{
+    visit(G,start);//访问该点,并标记
+    visited[start]=true;
+    for(int j=FirstNeighbor(G, start);j!=-1;j=NextNeighbor(G, start, j))//访问其未被访问的邻接顶点
+        if(visited[j]==false)
+            DFS(G,j);
+}
+
+void DFSTraverse(MGraph G)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+    
+    for(int i=1;i<=G.vexnum;i++)
+        if(visited[i]==false)
+        {
+            DFS(G,i);
+            cout << endl << "--------" << endl;//观察使用 DFS次数
+        }
+}
+
 void Test()
 {
     MGraph mg;
@@ -44,29 +75,27 @@ void Test()
     cin >> mg.vexnum >> mg.arcnum;
     
 /*
-4 4
-1234
-0 1 1 0
-0 0 0 0
-0 0 0 1
-1 0 0 0
+8 10
+12345678
+0 0 0 0 1 0 0 0
+1 0 0 0 0 0 0 0
+0 0 0 0 0 1 0 0 
+0 0 1 0 0 0 1 0
+0 0 0 0 0 0 0 0
+0 1 0 0 0 0 0 0
+0 0 1 0 0 1 0 1
+0 0 0 1 0 0 0 0
 
-5 5
-12345
-0 1 0 1 0
-1 0 1 0 1
-0 1 0 1 1
-1 0 1 0 0
-0 1 1 0 0
-
-6 9
-ABCDEF
-2147483647 5 2147483647 2147483647 2147483647 2147483647
-2147483647 2147483647 4 2147483647 2147483647 2147483647
-8 2147483647 2147483647 2147483647 2147483647 9
-2147483647 2147483647 5 2147483647 2147483647 6
-2147483647 2147483647 2147483647 5 2147483647 2147483647
-3 2147483647 2147483647 2147483647 1 2147483647
+8 7
+ABCDEFGH
+0 1 1 0 0 0 0 0
+1 0 0 1 1 0 0 0
+1 0 0 0 0 1 1 0
+0 1 0 0 0 0 0 0
+0 1 0 0 0 0 0 1
+0 0 1 0 0 0 0 0
+0 0 1 0 0 0 0 0
+0 0 0 0 1 0 0 0
 
 */
 
@@ -82,6 +111,8 @@ ABCDEF
                 cout << mg.Vex[j] << " ";
         cout << endl;
     }
+
+    DFSTraverse(mg);
 
 }
 

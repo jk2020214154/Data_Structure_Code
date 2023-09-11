@@ -1,5 +1,6 @@
 #include<iostream>
 #include<limits.h>
+#include<queue>
 
 using namespace std;
 
@@ -37,6 +38,50 @@ int NextNeighbor(MGraph G,int x,int y)
     return -1;
 }
 
+
+bool visited[MaxVertexNum];
+
+void visit(MGraph G,int pos)
+{
+    cout << G.Vex[pos] << " ";
+}
+
+void BFS(MGraph G,int start)
+{
+    queue<int> q;//此处为了方便,使用C++的stl中的队列
+
+    //将起点放入队列中,并标记为true
+    q.push(start);
+    visited[start]=true;
+
+    while(q.size()>0)
+    {
+        int temp=q.front();
+        visit(G,temp);//访问该结点
+        q.pop();//弹出队列
+
+        for(int j=FirstNeighbor(G, temp);j!=-1;j=NextNeighbor(G, temp, j))
+        {
+            if(visited[j]==false)//当前邻接顶点未访问,放入队列并标记
+            {
+                q.push(j);
+                visited[j]=true;
+            }
+        }
+    }
+    cout << endl << "--------" << endl;//观察使用 BFS次数
+}
+
+void BFSTraverse(MGraph G)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+    
+    for(int i=1;i<=G.vexnum;i++)
+        if(visited[i]==false)
+            BFS(G,i);
+}
+
 void Test()
 {
     MGraph mg;
@@ -44,29 +89,27 @@ void Test()
     cin >> mg.vexnum >> mg.arcnum;
     
 /*
-4 4
-1234
-0 1 1 0
-0 0 0 0
-0 0 0 1
-1 0 0 0
+8 10
+12345678
+0 0 0 0 1 0 0 0
+1 0 0 0 0 0 0 0
+0 0 0 0 0 1 0 0 
+0 0 1 0 0 0 1 0
+0 0 0 0 0 0 0 0
+0 1 0 0 0 0 0 0
+0 0 1 0 0 1 0 1
+0 0 0 1 0 0 0 0
 
-5 5
-12345
-0 1 0 1 0
-1 0 1 0 1
-0 1 0 1 1
-1 0 1 0 0
-0 1 1 0 0
-
-6 9
-ABCDEF
-2147483647 5 2147483647 2147483647 2147483647 2147483647
-2147483647 2147483647 4 2147483647 2147483647 2147483647
-8 2147483647 2147483647 2147483647 2147483647 9
-2147483647 2147483647 5 2147483647 2147483647 6
-2147483647 2147483647 2147483647 5 2147483647 2147483647
-3 2147483647 2147483647 2147483647 1 2147483647
+8 7
+ABCDEFGH
+0 1 1 0 0 0 0 0
+1 0 0 1 1 0 0 0
+1 0 0 0 0 1 1 0
+0 1 0 0 0 0 0 0
+0 1 0 0 0 0 0 1
+0 0 1 0 0 0 0 0
+0 0 1 0 0 0 0 0
+0 0 0 0 1 0 0 0
 
 */
 
@@ -82,6 +125,8 @@ ABCDEF
                 cout << mg.Vex[j] << " ";
         cout << endl;
     }
+
+    BFSTraverse(mg);
 
 }
 
