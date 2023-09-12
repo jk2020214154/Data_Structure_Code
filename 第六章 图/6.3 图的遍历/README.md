@@ -347,27 +347,228 @@ void DFSTraverse(MGraph G)
 
 >  设设计一个算法,判断一个无向图 $G$是否为一棵树.若是一棵树,则算法返回 $true$,否则返回 $false$.
 
+一个无向图 $G$是一棵树的条件是： $G$必须是无回路的连通图或者是有 $n-1$条边的连通图,这里采用后者作为判断条件.对连通图的判定,可用能否遍历全部顶点来实现;可以采用**深度优先搜索**算法在遍历图的过程中统计可能访问到的**顶点个数和边的条数**，如果一次遍历就能访问到 $n$个顶点和 $n-1$条边，则可判定此图是一棵树。
 
+```cpp
+bool visited[MaxVertexNum];
+
+void DFS(MGraph G,int start,int &node_num,int &edge_num)
+{
+    visited[start]=true;//标记该点,并增加顶点的个数
+    node_num++;
+
+    for(int j=FirstNeighbor(G, start);j!=-1;j=NextNeighbor(G, start, j))
+    {
+        //边数+1
+        edge_num++;
+        if(visited[j]==false)
+            DFS(G,j,node_num,edge_num);
+    }
+}
+
+bool isTree(MGraph G)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+    int node_num=0,edge_num=0;
+
+    DFS(G,1,node_num,edge_num);
+
+    if(node_num==G.vexnum&&edge_num==2*(G.vexnum-1))
+        return true;
+    return false;
+}
+```
 
 #### 6.3.3
 
 > 写出图的深度优先搜索 $DFS$算法的非递归算法(图采用邻接表形式).
 
+```cpp
+bool visited[MaxVertexNum];
+
+void visit(ALGraph G,int pos)
+{
+    cout << G.vertices[pos].data << " ";
+}
 
 
+void DFS(ALGraph G,int start)
+{
+    stack<int> sta;
+    sta.push(start);//把起点放入栈中
+    visited[start]=true;
 
+    while(sta.size()>0)
+    {
+        int temp=sta.top();//取出栈顶元素
+        visit(G,temp);
+        sta.pop();
+        for(int j=FirstNeighbor(G, temp);j!=-1;j=NextNeighbor(G, temp, j))//访问其未被访问的邻接顶点
+            if(visited[j]==false)
+            {
+                sta.push(j);
+                visited[j]=true;//标记,防止再次入栈
+            }        
+    }    
+}
+
+void DFSTraverse(ALGraph G)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+    
+    for(int i=1;i<=G.vexnum;i++)
+        if(visited[i]==false)
+            DFS(G,i);
+}
+```
 
 #### 6.3.4
 
 > 分别采用基于深度优先遍历和广度优先遍历算法判别以邻接表方式存储的有向图中是否存在由顶点 $v_i$到顶点 $v_j$的路径( $i \neq j$).注意,算法中涉及图的基本操作必须在此存储结构上实现.
 
+* **深度优先搜索**
 
+```cpp
+bool visited[MaxVertexNum];
+
+void DFS(ALGraph G,int start_,int end_,bool &can_reach)
+{
+    if(start_==end_)
+    {
+        can_reach=true;
+        return ;
+    }
+    visited[start_]=true;
+
+    for(int j=FirstNeighbor(G, start_);j!=-1;j=NextNeighbor(G, start_, j))
+        if(visited[j]==false)
+            DFS(G,j,end_,can_reach);
+}
+
+bool DFSTraverse(ALGraph G,int start_,int end_)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+    bool can_reach=false;
+
+    DFS(G,start_,end_,can_reach);
+
+    return can_reach;
+}
+```
+
+* **广度优先搜索**
+
+```cpp
+bool visited[MaxVertexNum];
+
+bool BFSTraverse(ALGraph G,int start_,int end_)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+
+    queue<int> q;
+    q.push(start_);
+    visited[start_]=true;
+
+    while(q.size()>0)
+    {
+        int temp=q.front();
+        q.pop();
+
+        if(temp==end_)
+            return true;
+        for(int j=FirstNeighbor(G, temp);j!=-1;j=NextNeighbor(G, temp, j))
+            if(visited[j]==false)
+            {
+                q.push(j);
+                visited[j]=true;
+            }
+    }
+    return false;
+}
+```
 
 #### 6.3.5
 
 >  假设图用邻接表表示,设计一个算法,输出从顶点 $V_i$到顶点 $V_j$的所有简单路径.
 
+*  $vector$版
+```cpp
+bool visited[MaxVertexNum];
 
+void DFS(ALGraph G,int start_,int end_,vector<VertexType> &path)
+{
+    
+    //cout << start_ << " " << end_ << endl;
+    if(start_==end_)
+    {
+        for(int i=0;i<path.size();i++)
+            cout << G.vertices[path[i]].data << " ";
+        cout << endl;
+        return ;
+    }
+
+    for(int j=FirstNeighbor(G, start_);j!=-1;j=NextNeighbor(G, start_, j))
+    {
+        if(visited[j]==false)
+        {
+            visited[j]=true;
+            path.push_back(j);
+            DFS(G, j, end_, path);
+            path.pop_back();
+            visited[j]=false;
+        }
+    }
+}
+
+void DFSTraverse(ALGraph G,int start_,int end_)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+    vector<VertexType> path;
+    path.push_back(start_);
+    visited[start_]=true;
+    DFS(G, start_, end_,path);
+    path.pop_back();
+    visited[start_]=false;
+}
+```
+
+* 非 $vector$版
+
+```cpp
+bool visited[MaxVertexNum];
+VertexType path[MaxVertexNum];
+
+void DFS(ALGraph G,int start_,int end_,int tot)
+{
+    visited[start_]=true;
+    path[tot]=G.vertices[start_].data;
+    if(start_==end_)
+    {
+        for(int i=0;i<=tot;i++)
+            cout << path[i] << " ";
+        cout << endl;
+        visited[start_]=false;
+        return ;
+    }
+
+    for(int j=FirstNeighbor(G, start_);j!=-1;j=NextNeighbor(G, start_, j))
+        if(visited[j]==false)
+            DFS(G,j,end_,tot+1);
+    visited[start_]=false;
+}
+
+void DFSTraverse(ALGraph G,int start_,int end_)
+{
+    for(int i=1;i<=G.vexnum;i++)
+        visited[i]=false;
+    DFS(G, start_, end_, 0);
+}
+```
 
 
 
