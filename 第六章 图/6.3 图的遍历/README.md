@@ -339,9 +339,9 @@ void DFSTraverse(MGraph G)
 >
 > ![](https://cdn.acwing.com/media/article/image/2023/09/12/85276_1a49ca8a51-20230912173044.png) 
 
+左图为图 $G$,中图为深度优先生成树,右图为广度优先生成树.
 
-
-
+![20230912180227.png](https://cdn.acwing.com/media/article/image/2023/09/12/85276_822dd06a51-20230912180227.png) 
 
 #### 6.3.2
 
