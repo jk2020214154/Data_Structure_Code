@@ -46,8 +46,8 @@
  $Dijkstra$算法步骤如下：
 
 1. 初始化起点 $start$的 $dist[start]=0$,其余结点的 $dist$的值为**正无穷大**( $+ \infty$);
-2. 找出一个**未被标记**的且 $dist[x]$**最小的结点** $x$,然后标记结点 $x$.
-3. 扫描结点 $x$的所有出边 $(x,y,z)$,若 $dist[y]>dist[x]+z$,则使用 $dist[x]+z$更新 $dist[y]$.
+2. 找出一个**未被标记**的且 $dist[x]$**最小的结点** $x$,然后标记结点 $x$;
+3. 扫描结点 $x$的所有出边 $(x,y,z)$,若 $dist[y]>dist[x]+z$,则使用 $dist[x]+z$更新 $dist[y]$;
 4. 重复上述 $2 \sim 3$两个步骤,直到所有结点都被标记.
 
  $Dijkstra$算法基于贪心的思想,它只适用于**所有边的长度都是非负数**的图.当边长 $z$都是非负数时,全局最小值不可能再被其他结点更新,故在第一步选出的结点 $x$必然满足: $dist[x]$已经是起点到 $x$的最短路径.我们不断选择全局最小值进行标记和扩展,最终可得到起点 $start$到每一个结点的最短路径的长度.
@@ -55,36 +55,40 @@
 >  **举例**：
 >
 >  1. 用一个 $dis$数组保存源点到其余各个结点的距离, $dis[i]$表示源点到结点 $i$的距离,初始时 $dis$数组的各个元素为无穷大( $+ \infty$);用一个数组 $flag$标记是否找到了源点到该结点的最短距离,初始时 $flag$数组的各个元素清为 $0$;
->
->  ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_458f871770-20231021211749.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_458f871770-20231021211749.png) 
 >
 >  2. 假设源点是 $1$,将其 $dis[1]$设置为 $0$(源点到源点距离为 $0$);
+
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_9671d87670-20231021212008.png) 
 >
->  ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_9671d87670-20231021212008.png) 
+>  3. 遍历 $dis$数组,找到一个结点,这个结点是：**没有确定最短路径的结点中距离源点最近的点**.假设该结点编号为 $i$,此时就找到了源点到该结点的最短距离, $flag[i]$设置为 $1$;
+
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_104ee59f70-20231021213010.png)
 >
->  3. 遍历 $dis$数组,找到一个结点,这个结点是：**没有确定最短路径的结点中距离源点最近的点**.假设该结点编号为 $i$,此时就找到了源点到该结点的最短距离, $flag[i]$设置为 $1$.
+>  4. 遍历 $i$所有可以到达的结点 $j$,如果 $dis[j]>dis[i]+w[i][j]$( $w[i][j]$表示 $i \to j$的距离),则更新 $dis[j]$为 $dis[i]+w[i][j]$;
+
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_7b05aa6b70-20231021213341.png)
 >
->  ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_104ee59f70-20231021213010.png)
->
->  4. 遍历 $i$所有可以到达的结点 $j$,如果 $dis[j]>dis[i]+w[i][j]$( $w[i][j]$表示 $i \to j$的距离),则更新 $dis[j]$为 $dis[i]+w[i][j]$.
->
->     ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_7b05aa6b70-20231021213341.png)
->
->  5. 重复 $3 \sim 4$步骤,直到所有结点的 $flag$都标记为 $1$
->
->  ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_c0bef21f70-20231021213511.png) 
->
->  ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_c51d93f470-20231021213522.png) 
->
->  ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_c723e7fa70-20231021213532.png) 
+>  5. 重复 $3 \sim 4$步骤,直到所有结点的 $flag$都标记为 $1$.
+
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_c0bef21f70-20231021213511.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_c51d93f470-20231021213522.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_c723e7fa70-20231021213532.png) 
 >
 >  6. 此时 $dis$数组中,就保存了源点到其余各个结点的最短距离.
->
->  ![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_ee2c960d70-20231021213656.png) 
 
-
+![](https://cdn.acwing.com/media/article/image/2023/10/21/85276_ee2c960d70-20231021213656.png) 
 
 ##### Floyd算法
 
+为了求出图中任意两点间的最短路径,当然可以把每个点作为起点,求解 $N$次单源最短路径问题.不过,在任意两点间最短路问题中,图一般比较稠密.使用 $Floyd$算法可以在 $O(n^3)$的时间内完成求解.
 
+1. 初始化邻接矩阵(二维数组) $dist[][]$,其中 $dist[i][j]$表示顶点 $i$到顶点 $j$的权值,若顶点 $i$和顶点 $j$不相邻,则 $dist[i][j]=+ \infty$,若顶点 $i$等于顶点 $j$,则 $dist[i][j]=0$;
+2. 以第 $1$个顶点为中介点,若 $dist[i][j]>dist[i][1]+dist[1][j]$,更新 $dist[i][j]$;
+3. 依次以第 $2,3,\cdots,k,\cdots,n$个顶点为中介点,若 $dist[i][j]>dist[i][k]+dist[k][j]$,更新 $dist[i][j]$.
+
+>  **举例**：
 
