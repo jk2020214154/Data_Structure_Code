@@ -90,5 +90,61 @@
 2. 以第 $1$个顶点为中介点,若 $dist[i][j]>dist[i][1]+dist[1][j]$,更新 $dist[i][j]$;
 3. 依次以第 $2,3,\cdots,k,\cdots,n$个顶点为中介点,若 $dist[i][j]>dist[i][k]+dist[k][j]$,更新 $dist[i][j]$.
 
->  **举例**：
+**举例**：
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_4b4b7e2270-20231022150312.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_5c08171770-20231022150323.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_4f93ef5170-20231022150331.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_53c2b1b270-20231022150339.png) 
+
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_62a4fae970-20231022150349.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_65c801b270-20231022150402.png) 
+
+设 $dist[k,i,j]$表示`经过若干个编号不超过k的结点`,从 $i$到 $j$的最短路长度.该问题可划分为两个子问题,经过编号不超过 $k-1$的结点从 $i$到 $j$,或者从 $i$到 $k$,再到 $j$,可得:
+
+$\color{Red}{dist[k,i,j]=min(dist[k-1,i,j],dist[k-1,i,k]+dist[k-1,k,j])}$
+
+初值为 $dist[0,i,j]=A[i,j]$,其中 $A$为该图的邻接矩阵.
+
+可以看到, $Floyd$算法的本质是**动态规划**, $k$是阶段,应置于最外层循环中, $i$和 $j$是附加状态,应置于内层循环.故不应该采用 $i,j,k$的顺序执行循环,会得到错误的答案. $k$这一维可省略(三维变成二维),最初,可直接用 $dist$保存邻接矩阵,然后执行动态规划的过程.当最外层循环到 $k$时,内层有转移方程: $\color{Red}{dist[i,j]=min(dist[i,j],dist[i,k]+dist[k,j])}$.
+
+#### 有向无环图描述表达式
+
+若一个有向图中不存在环,则称为有向无环图,简称 $DAG$图.
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_db9e8b6070-20231022153623.png) 
+
+将表达式转化为有向无环图步骤:
+
+1. 把各个操作数不重复地排成一排;
+2. 标出各个运算符的生效顺序(先后顺序有点出入无所谓);
+3. 按顺序加入运算符,注意**分层**;
+4. 从底向上逐层检查同层的运算符是否可以合体.
+
+以`(a*b)*(a*b)*(a*b)*c`为例
+
+* **第一步**:把各个操作数不重复地排成一排
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_e1e097d170-20231022154437.png) 
+
+* **第二步**:标出各个运算符的生效顺序(先后顺序有点出入无所谓)
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_1709280270-20231022154607.png) 
+
+* **第三步**:按顺序加入运算符,注意**分层**
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_6782a5da70-20231022154821.png) 
+
+* **第四步**:从底向上逐层检查同层的运算符是否可以合体
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_9da2932a70-20231022154927.png) 
+
+![](https://cdn.acwing.com/media/article/image/2023/10/22/85276_a0d42b6070-20231022154946.png) 
+
+#### 拓扑排序
 
