@@ -187,5 +187,5 @@ $\color{Red}{dist[k,i,j]=min(dist[k-1,i,j],dist[k-1,i,k]+dist[k-1,k,j])}$
 >  它是指从源点 $v_1$到顶点 $v_k$的最长路径长度.事件 $v_k$的最早发生时间决定了所有从 $v_k$开始的活动能够开工的最早时间.
 >
 > *  $ve(源点)=0$;
-> *  $ve(k)=max(ve(j)+weight(v_j,v_k))$, $v_k$为 $v_j$的任意后继, $weight(v_j,v_k)$表示 $<v_j,v_k>$上的权值.
+> *  $ve(k)=max(ve(j)+weight(v_j,v_k))$, $v_k$为 $v_j$的任意后继, $weight(v_j,v_k)$表示 $< v_j,v_k >$上的权值.
 
