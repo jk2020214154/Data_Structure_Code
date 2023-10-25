@@ -359,7 +359,7 @@ $\color{Red}{dist[k,i,j]=min(dist[k-1,i,j],dist[k-1,i,k]+dist[k-1,k,j])}$
 
 ![](https://cdn.acwing.com/media/article/image/2023/10/24/85276_8152b2e072-20231024150323.png) 
 
->  若某带权图为 $G=(V,E)$,其中`V={` $v_1,v_2,v_3,v_4,v_5,v_6,v_7,v_8,v_9,v_{10}$ `}`, `E={` $ \left< v_1,v_2 \right> 5, \left< v_1,v_3 \right> 6 , \left< v_2,v_5 \right> 3, \left< v_3,v_5 \right> 6, \left< v_3,v_4 \right> 3,$ $\left< v_4,v_5\right>3,\left< v_4,v_7\right>1,\left< v_4,v_8\right>4,\left< v_5,v_6 \right>4, \left< v_5,v_7 \right>2,\left< v_6,v_{10} \right>4,$ $\left< v_7,v_9\right>5,\left< v_8,v_9\right>2,\left< v_9,v_{10}\right>2$ `}`(注:边括号外的数据表示边上的权值),则 $G$的关键路径的长度为().
+>  若某带权图为 $G=(V,E)$,其中`V={` $v_1,v_2,v_3,v_4,v_5,v_6,v_7,v_8,v_9,v_{10}$ `}`, `E={` $\left< v_1,v_2 \right> 5, \left< v_1,v_3 \right> 6 , \left< v_2,v_5 \right> 3, \left< v_3,v_5 \right> 6, \left< v_3,v_4 \right> 3,$ $\left< v_4,v_5\right>3,\left< v_4,v_7\right>1,\left< v_4,v_8\right>4,\left< v_5,v_6 \right>4, \left< v_5,v_7 \right>2,\left< v_6,v_{10} \right>4,$ $\left< v_7,v_9\right>5,\left< v_8,v_9\right>2,\left< v_9,v_{10}\right>2$ `}`(注:边括号外的数据表示边上的权值),则 $G$的关键路径的长度为().
 >
 >  A. $19$
 >
