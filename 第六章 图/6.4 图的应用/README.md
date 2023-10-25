@@ -204,15 +204,15 @@ $\color{Red}{dist[k,i,j]=min(dist[k-1,i,j],dist[k-1,i,k]+dist[k-1,k,j])}$
 > 计算 $vl()$值时,按从后往前的顺序进行,可以在**逆拓扑排序**(在上述拓扑排序中,增设一个栈以记录拓扑序列,**拓扑排序结束后从栈顶至栈底**为逆拓扑有序序列)的基础上计算.
 >
 > * 初始时,令 $vl(1,\cdots,n)=ve[n]$;
-> * 栈顶顶点 $v_j$出栈,计算其所有直接前驱顶点 $v_k$的最迟发生时间,若 $vl[j]-weight(v_k,v_j)<vl[k]$,则 $vl[k]=vl[j]-weight(v_k,v_j)$.以此类推,直至输出全部栈中顶点.
+> * 栈顶顶点 $v_j$出栈,计算其所有直接前驱顶点 $v_k$的最迟发生时间,若 $vl[j]-weight(v_k,v_j) < vl[k]$,则 $vl[k]=vl[j]-weight(v_k,v_j)$.以此类推,直至输出全部栈中顶点.
 
 * **活动** $a_i$的**最早开始时间** $e(i)$
 
-> 它是指该**活动弧的起点**所表示的事件的**最早发生时间**. 若边 $ \left< v_k, v_j \right> $表示活动 $a_i$,则有 $\color{Red}{e(i)=ve(k)}$.
+> 它是指该**活动弧的起点**所表示的事件的**最早发生时间**. 若边 $\left< v_k, v_j \right>$表示活动 $a_i$,则有 $\color{Red}{e(i)=ve(k)}$.
 
 * **活动** $a_i$的**最迟开始时间** $l(i)$
 
->  它是指该**活动弧的终点**所表示的事件的**最迟发生时间与该活动所需时间之差**.若边 $ \left< v_k, v_j \right> $表示活动 $a_i$,则有 $\color{Red}{l(i)=vl(j)-weight(v_k,v_j)}$.
+>  它是指该**活动弧的终点**所表示的事件的**最迟发生时间与该活动所需时间之差**.若边 $\left< v_k, v_j \right>$表示活动 $a_i$,则有 $\color{Red}{l(i)=vl(j)-weight(v_k,v_j)}$.
 
 * 一个**活动** $a_i$的**最迟开始时间** $l(i)$和其**最早开始时间** $e(i)$的**差额** $\color{Red}{d(i)=l(i)-e(i)}$
 
@@ -359,7 +359,7 @@ $\color{Red}{dist[k,i,j]=min(dist[k-1,i,j],dist[k-1,i,k]+dist[k-1,k,j])}$
 
 ![](https://cdn.acwing.com/media/article/image/2023/10/24/85276_8152b2e072-20231024150323.png) 
 
->  若某带权图为 $G=(V,E)$,其中`V={` $v_1,v_2,v_3,v_4,v_5,v_6,v_7,v_8,v_9,v_{10}$ `}`, `E={` $ \left< v_1,v_2 \right> 5, \left< v_1,v_3 \right> 6 , \left< v_2,v_5 \right> 3, \left< v_3,v_5 \right> 6, \left< v_3,v_4\right>3,$ $\left< v_4,v_5\right>3,\left< v_4,v_7\right>1,\left< v_4,v_8\right>4,\left< v_5,v_6 \right>4, \left< v_5,v_7 \right>2,\left< v_6,v_{10} \right>4,$ $\left< v_7,v_9\right>5,\left< v_8,v_9\right>2,\left< v_9,v_{10}\right>2$ `}`(注:边括号外的数据表示边上的权值),则 $G$的关键路径的长度为().
+>  若某带权图为 $G=(V,E)$,其中`V={` $v_1,v_2,v_3,v_4,v_5,v_6,v_7,v_8,v_9,v_{10}$ `}`, `E={` $ \left< v_1,v_2 \right> 5, \left< v_1,v_3 \right> 6 , \left< v_2,v_5 \right> 3, \left< v_3,v_5 \right> 6, \left< v_3,v_4 \right> 3,$ $\left< v_4,v_5\right>3,\left< v_4,v_7\right>1,\left< v_4,v_8\right>4,\left< v_5,v_6 \right>4, \left< v_5,v_7 \right>2,\left< v_6,v_{10} \right>4,$ $\left< v_7,v_9\right>5,\left< v_8,v_9\right>2,\left< v_9,v_{10}\right>2$ `}`(注:边括号外的数据表示边上的权值),则 $G$的关键路径的长度为().
 >
 >  A. $19$
 >
@@ -482,7 +482,7 @@ $\color{Red}{dist[k,i,j]=min(dist[k-1,i,j],dist[k-1,i,k]+dist[k-1,k,j])}$
 >
 > D. 无法确定是否存在
 
-对角线以下的元素均为零,表明只有从顶点 $i$到顶点 $j$( $i<j$)可能有边,而从顶点 $j$到顶点 $i$一定无边,即有向图是一个无环图,故一定存在拓扑序列.
+对角线以下的元素均为零,表明只有从顶点 $i$到顶点 $j$( $i < j$)可能有边,而从顶点 $j$到顶点 $i$一定无边,即有向图是一个无环图,故一定存在拓扑序列.
 
 对于下图对应的拓扑序列为 $1,2,3$或 $1,3,2$,故此时**存在不唯一**的拓扑序列;若对角线以上的元素均为 $1$,以下元素全为 $0$,则拓扑序列**唯一**.
 
